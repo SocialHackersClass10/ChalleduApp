@@ -1,0 +1,13 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "The backend side for the Challedu project",
+  "main": "index.js",
+  "repository": "https://github.com/SocialHackersClass10/ChalleduApp",
+  "author": "Social Hackers Academy Class 10",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
