@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "The backend side for the Challedu project",
   "main": "index.js",
+  "scripts": {
+    "check": "nodemon ./src/index.js"
+  },
   "repository": "https://github.com/SocialHackersClass10/ChalleduApp",
   "author": "Social Hackers Academy Class 10",
   "license": "MIT",
