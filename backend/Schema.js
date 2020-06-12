@@ -18,7 +18,7 @@ const usersSchema = mongoose.Schema({
     email: {type:String, trim: true}, 
     full_name: {type:String, trim: true},
     role: { type: String, trim: true, enum: ['NGO', 'administrator', 'User'] },
-    affiliated_org: {type:String, trim: true},  //the NGO or NGOs that mentor may belongs
+    organization_name: {type:String, trim: true},  //the NGO or NGOs that mentor may belongs
     organization_id: {type: ObjectId, default:""}, //the _id of the NGO or NGOs that mentor may belongs
     affinities: [{type:String, enum: affinitiesArray}], //an array of _id affinities
     title: {type:String, trim: true},  //user's professional title
