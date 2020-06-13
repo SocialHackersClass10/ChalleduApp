@@ -12,11 +12,15 @@ router.get('/users', (req, res) => {
 router.get('/users/:id', async (req,res) => {
     try{
         let user = await Users.findById(req.params.id);
-        delete user.password;
-        res.status(200).json(user);
-    }catch(error){
-        res.status(404).send({ error: `The given id ${req.params.id} not found.` });
-    }    
+        if (user){
+            delete user.password;
+            res.status(200).json(user);
+        }else{
+            res.status(404).send({ error: `The given id ${req.params.id} not found.` });
+        };
+    }catch(err){
+        res.status(404).send({ error: err });
+    };    
 });
 
 
