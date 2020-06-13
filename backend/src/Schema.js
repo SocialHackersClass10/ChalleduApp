@@ -6,7 +6,7 @@ mongoose.set('useFindAndModify',false);
 
 // export enables all modules to use same connection
 // connection initialized at "main" as defined in package.json
-module.exports=mongoose;
+module.exports.mongoose=mongoose;
 
 const affinitiesArray = [
     "ΜΗΔΕΝΙΚΗ ΦΤΩΧΕΙΑ", "ΜΗΔΕΝΙΚΗ ΠΕΙΝΑ",
@@ -19,7 +19,8 @@ const affinitiesArray = [
     "ΕΙΡΗΝΗ, ΔΙΚΑΙΟΣΥΝΗ ΚΑΙ ΙΣΧΥΡΟΙ ΘΕΣΜΟΙ", "ΣΥΝΕΡΓΑΣΙΑ ΓΙΑ ΤΟΥΣ ΣΤΟΧΟΥΣ"
 ];
 
-const usersSchema = mongoose.Schema({
+// keep schema and model in singular
+const userSchema = mongoose.Schema({
     approval_pending: Boolean,
     username: {type:String, trim: true},
     password: {type:String, trim: true},
@@ -44,8 +45,8 @@ const usersSchema = mongoose.Schema({
     }
 });
 
-
-const NGOsSchema = mongoose.Schema({
+// keep schema and model in singular
+const NGOSchema = mongoose.Schema({
     approval_pending: Boolean,
     name: {type:String, trim: true},
     image: {type:String, trim: true},
@@ -61,7 +62,10 @@ const NGOsSchema = mongoose.Schema({
     documents: [Buffer]
 });
 
+// keep schema and model in singular - also export the models
+module.exports.User = mongoose.model('user', userSchema);
+module.exports.NGO = mongoose.model('ngo', NGOSchema);
 
-const Users = mongoose.model('Users', usersSchema);
-const NGOs = mongoose.model('NGOs', NGOsSchema);
+// additional export the list of affinities
+module.exports.affinities = affinitiesArray;
 

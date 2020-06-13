@@ -6,8 +6,8 @@ const express = require('express');
 const path = require('path')
 const app = express();
 
-// import mongoose from our Schema
-const mongoose = require("./Schema");
+// import mongoose & models from our Schema
+const {mongoose,User,NGO,affinities} = require("./Schema");
 
 // Middleware
 app.use(express.json())
@@ -31,19 +31,24 @@ if (!process.env.MONGODB_KEY) {
 
 // mongodb: initialise database conncetion / terminate on error
 mongoose.connect(process.env.MONGODB_KEY, mongoConxParams, err => {
-    if (err) {
-        const errorMsg = 'Database connection Error:\n'
-                        +(err.code   ?`Code: ${err.code}`+'\n':'')
-                        +(err.message?err.message+'\n':'');
-        terminateServer(errorMsg);
-        process.exit(1);
-    };
-    app.listen(PORT, () => console.log(`Server ready, listening on port ${PORT}`));
+    if (err) {terminateServer('Database connection Error',err)};
+    User.createCollection( err => {
+        if (err) {terminateServer('Users collection creation Error',err)};
+        NGO.createCollection( err => {
+            if (err) {terminateServer('Ngos collection creation Error',err)};
+            app.listen(PORT, () =>
+                        console.log(`Server ready, listening on port ${PORT}`)
+            );
+        });
+    });
 });
 
 // log a message and stop the server
-function terminateServer(message){
-    console.log(message,'\nThe Server is terminating.\n');
+function terminateServer(action,error){
+    const errorMsg = action+':\n'
+                    +(error.code   ?`Code: ${error.code}`+'\n':'')
+                    +(error.message?error.message+'\n':'');
+    console.log(errorMsg,'\nThe Server is terminating.\n');
     process.exit(1);
 };
 
