@@ -26,7 +26,7 @@ console.log('\nServer initialization ...\n');
 
 // dotenv: verify existing conncetion URL and credentials / terminate if missing
 if (!process.env.MONGODB_KEY) {
-    terminateServer('Missing database connection URL');
+    terminateServer('Missing database connection URL',{message:'Please verify .env'});
 };
 
 // mongodb: initialise database conncetion / terminate on error
@@ -44,7 +44,7 @@ mongoose.connect(process.env.MONGODB_KEY, mongoConxParams, err => {
 });
 
 // log a message and stop the server
-function terminateServer(action,error){
+function terminateServer(action,error={}){
     const errorMsg = action+':\n'
                     +(error.code   ?`Code: ${error.code}`+'\n':'')
                     +(error.message?error.message+'\n':'');
