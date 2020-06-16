@@ -6,7 +6,7 @@ router.get('/users', (req, res) => {
 })
 
 router.post('/users', (req, res) => {
-    res.status(200).send(req.body)
+    console.log("Data saved successfull")
 })
 
 module.exports = router
