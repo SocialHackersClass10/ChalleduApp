@@ -14,7 +14,6 @@ const { mongoose, User, NGO, affinities } = require("./Schema");
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(express.static(path.join(__dirname, 'src')))
-app.use('/', require('./routes'))
 app.use('/ngos', (req, res, next) => {
     if (!req.body.name) {
         res.status(400).json({ error: 'Name is required' })
@@ -28,6 +27,7 @@ app.use('/ngos', (req, res, next) => {
         res.status(400).json({ error: 'Address and phone are required' })
     } else next();
 })
+app.use('/', require('./routes'))
 
 // dotenv: SERVER_PORT
 const PORT = process.env.SERVER_PORT || 5000;
