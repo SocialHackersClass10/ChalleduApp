@@ -48,15 +48,15 @@ const userSchema = mongoose.Schema({
 // keep schema and model in singular
 const NGOSchema = mongoose.Schema({
     approval_pending: Boolean,
-    name: { type: String, trim: true },
+    name: { type: String, trim: true, required: true },
     image: { type: String, trim: true },
-    webpage: { type: String, trim: true },
-    description: { type: String, trim: true },
-    main_representative: { type: String, trim: true },
-    affinities: [{ type: String, enum: affinitiesArray }], //an array of _id affinities
+    webpage: { type: String, trim: true, required: true },
+    description: { type: String, trim: true, required: true },
+    main_representative: { type: String, trim: true, required: true },
+    affinities: [{ type: String, enum: affinitiesArray, required: true }], //an array of _id affinities
     contact: {
-        address: [{ type: String, trim: true }],
-        phone: [{ type: String, trim: true }],
+        address: [{ type: String, trim: true, required: true }],
+        phone: [{ type: String, trim: true, required: true }],
         contact_hours: [{ type: String, trim: true }]
     },
     documents: [Buffer]
