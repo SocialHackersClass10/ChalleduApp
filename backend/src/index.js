@@ -13,7 +13,6 @@ const { mongoose, User, NGO, affinities } = require("./Schema");
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(express.static(path.join(__dirname, 'src')))
-app.use(require('./middleware/middleware'))
 app.use('/', require('./routes'))
 
 // dotenv: SERVER_PORT
