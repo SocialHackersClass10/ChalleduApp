@@ -45,7 +45,7 @@ mongoose.connect(process.env.MONGODB_KEY, mongoConxParams, err => {
 
 
 //Error from data
-app.use(require('./middleware/error'))
+// app.use(require('./middleware/error'))
 
 // log a message and stop the server
 function terminateServer(action, error = {}) {
