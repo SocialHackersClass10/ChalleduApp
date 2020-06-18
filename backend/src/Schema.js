@@ -21,7 +21,7 @@ const affinitiesArray = [
 // keep schema and model in singular
 const userSchema = mongoose.Schema({
     approval_pending: Boolean,
-    username: { type: String, required: true, trim: true },
+    username: { type: String, trim: true },
     password: { type: String, required: true, trim: true },
     email: { type: String, required: true, trim: true },
     full_name: { type: String, required: true, trim: true },
@@ -35,8 +35,8 @@ const userSchema = mongoose.Schema({
     gender: { type: { type: String, trim: true }, enum: ['female', 'male', 'other'] },
     image: { type: String, trim: true },
     webpage: { type: String, trim: true },
-    birth_date: { type: Date, required: true, },
-    description: { type: String, required: true, trim: true },
+    birth_date: { type: Date },
+    description: { type: String, trim: true },
     contact: {
         address: [{ type: String, trim: true }],
         phone: [{ type: String, trim: true }],

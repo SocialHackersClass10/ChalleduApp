@@ -15,7 +15,7 @@ router.post('/users', require('./middleware/middleware'), (req, res) => {
         newUser.password = hash
         newUser.save((err, doc) => {
             if (!err) {
-                res.status(201).json({ doc })
+                res.status(201).json({ user: doc })
             } else {
                 res.status(400).json({
                     message: err.message
