@@ -1,18 +1,18 @@
 const express = require('express');
 const { User, NGO } = require("./Schema");
 const router = express.Router();
+const { isURL, ngoCheck } = require('./utils')
 
 //Route to get all users
 router.get('/users', async (req, res) => {
     const users = await User.find({});
 
     try {
-        res.status(200).json(users)
+        res.status(200).json({ users: users })
     } catch (err) {
-        res.status(500).send(err)
+        res.status(500).send({ error: err })
     }
 });
-
 
 //route to get a single user
 router.get('/users/:id', async (req, res) => {
@@ -36,11 +36,14 @@ router.post('/users', (req, res) => {
 
 router.post('/ngos', (req, res) => {
 
-    //req.body destructuring
+    //Validating the data posted to the database
+    ngoCheck(req, res);
+
+    //req.body destructuring in order not to repeat ourselves with req.body.key etc.
     const { name, image, webpage, description, main_representative, affinities, contact: { address, phone, contact_hours }
     } = req.body;
 
-    const ngo = new NGO({ approval_pending: false, name: name, image: image, webpage: webpage, description: description, main_representative: main_representative, affinities: affinities, contact: { address: address, phone: phone, contact_hours: contact_hours } });
+    const ngo = new NGO({ approval_pending: true, name: name, image: image, webpage: webpage, description: description, main_representative: main_representative, affinities: affinities, contact: { address: address, phone: phone, contact_hours: contact_hours } });
 
     ngo.save((error, ngo) => {
         if (error) {
