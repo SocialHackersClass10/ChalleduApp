@@ -24,6 +24,17 @@ router.get('/users/:id', async (req,res) => {
     };    
 });
 
+// Update a user
+router.put("/users/:id", async (req, res) => {
+    const user_id = req.params.id;
+    const user_data = req.body;
+    try {
+      await User.findByIdAndUpdate(user_id, { $set: user_data });
+      res.status(200).json({ _id: user_id });
+    } catch (err) {
+      res.status(404).send({ error: err });
+    }
+  });
 
 router.post('/users', require('./middleware/middleware'), (req, res) => {
     const newUser = new User(req.body)
