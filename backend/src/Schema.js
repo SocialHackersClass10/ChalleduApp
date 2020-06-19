@@ -18,9 +18,16 @@ const affinitiesArray = [
     "ΕΙΡΗΝΗ, ΔΙΚΑΙΟΣΥΝΗ ΚΑΙ ΙΣΧΥΡΟΙ ΘΕΣΜΟΙ", "ΣΥΝΕΡΓΑΣΙΑ ΓΙΑ ΤΟΥΣ ΣΤΟΧΟΥΣ"
 ];
 
+// addition for issue#38-document-approval-schema-modification
+// here: define possible documentStates
+const documentStates = [ 'Approved', 'Pending', 'Rejected' ];
+
 // keep schema and model in singular
 const userSchema = mongoose.Schema({
-    approval_pending: Boolean,
+    // addition for issue#38-document-approval-schema-modification
+    // here: substitute former field with new
+    //  approval_pending: Boolean,
+    document_state: [{type:String, enum: documentStates}],
     username: { type: String, trim: true },
     password: { type: String, required: true, trim: true },
     email: { type: String, required: true, trim: true },
@@ -46,13 +53,16 @@ const userSchema = mongoose.Schema({
 
 // keep schema and model in singular
 const NGOSchema = mongoose.Schema({
-    approval_pending: Boolean,
-    name: { type: String, trim: true },
-    image: { type: String, trim: true },
-    webpage: { type: String, trim: true },
-    description: { type: String, trim: true },
-    main_representative: { type: String, trim: true },
-    affinities: [{ type: String, enum: affinitiesArray }], //an array of _id affinities
+    // addition for issue#38-document-approval-schema-modification
+    // here: substitute former field with new
+    //  approval_pending: Boolean,
+    document_state: [{type:String, enum: documentStates}],
+    name: {type:String, trim: true},
+    image: {type:String, trim: true},
+    webpage: {type:String, trim: true},
+    description: {type:String, trim: true},
+    main_representative: {type:String, trim: true},
+    affinities: [{type:String, enum: affinitiesArray}], //an array of _id affinities
     contact: {
         address: [{ type: String, trim: true }],
         phone: [{ type: String, trim: true }],
@@ -67,3 +77,7 @@ module.exports.NGO = mongoose.model('ngo', NGOSchema);
 
 // additional export the list of affinities
 module.exports.affinities = affinitiesArray;
+
+// addition for issue#38-document-approval-schema-modification
+// here: export the list documentStates
+module.exports.documentStates = documentStates;
