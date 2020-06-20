@@ -43,7 +43,7 @@ router.post('/ngos', (req, res) => {
     const { name, image, webpage, description, main_representative, affinities, contact: { address, phone, contact_hours }
     } = req.body;
 
-    const ngo = new NGO({ approval_pending: true, name: name, image: image, webpage: webpage, description: description, main_representative: main_representative, affinities: affinities, contact: { address: address, phone: phone, contact_hours: contact_hours } });
+    const ngo = new NGO({ document_state: 'Pending', name: name, image: image, webpage: webpage, description: description, main_representative: main_representative, affinities: affinities, contact: { address: address, phone: phone, contact_hours: contact_hours } });
 
     ngo.save((error, ngo) => {
         if (error) {
