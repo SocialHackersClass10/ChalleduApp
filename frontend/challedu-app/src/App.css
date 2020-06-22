@@ -1,38 +1,34 @@
-.App {
+#container{
+  background-repeat: no-repeat;
+  background: url(../src/images/wallpaper.svg);
+  background-size: cover;
+}
+
+.welcome{
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+#logo{
+  width: 30%;
+  height: 30%;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+#logo, p, #welcome_buttons{
+  margin-top: 10%;
+  margin-bottom: 6%;
+  font-size: 2rem;
+  font-family: 'Segoe UI, Tahoma, Verdana, sans-serif'
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+#navlogo{
+  width: 10%;
+  margin-right: 45%;
+  margin-left: 3%;
 }
 
-.App-link {
-  color: #61dafb;
+#nav_buttons{
+  float: right;
+  margin-top: 3%;
+  margin-right: 3%;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
