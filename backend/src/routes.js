@@ -4,18 +4,17 @@ const bcrypt = require('bcrypt');
 const router = express.Router();
 const { isURL, ngoCheck } = require('./utils')
 
-//Route to get all users
+// endpoint: get all users
 router.get('/users', async (req, res) => {
-    const users = await User.find({});
-
     try {
+        const users = await User.find({});
         res.status(200).json({ users: users })
     } catch (err) {
         res.status(500).send({ error: err })
     }
 });
 
-//route to get a single user
+// endpoint: get single user
 router.get('/users/:id', async (req, res) => {
     try {
         let user = await User.findById(req.params.id);
@@ -30,7 +29,7 @@ router.get('/users/:id', async (req, res) => {
     };
 });
 
-// Update a user
+// endpoint: Update a user
 router.put("/users/:id", async (req, res) => {
     const user_id = req.params.id;
     const user_data = req.body;
@@ -40,8 +39,9 @@ router.put("/users/:id", async (req, res) => {
     } catch (err) {
       res.status(404).send({ error: err });
     }
-  });
+});
 
+// endpoint: insert a user
 router.post('/users', require('./middleware/middleware'), (req, res) => {
     const newUser = new User(req.body)
     const saltRounds = 10;
@@ -59,6 +59,7 @@ router.post('/users', require('./middleware/middleware'), (req, res) => {
     });
 })
 
+// endpoint: insert an NGO
 router.post('/ngos', (req, res) => {
 
     //Validating the data posted to the database
@@ -76,5 +77,15 @@ router.post('/ngos', (req, res) => {
         } else { res.status(201).json({ _id: ngo._id }) }
     })
 })
+
+// endpoint: get all ngos
+router.get('/ngos', async (req, res) => {
+    try {
+        const ngos = await NGO.find({},'document_state name image description affinities');
+        res.status(200).json({ ngos: ngos });
+    } catch (err) {
+        res.status(500).send({ error: err });
+    };
+});
 
 module.exports = router;
