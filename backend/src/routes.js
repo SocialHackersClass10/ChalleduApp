@@ -101,7 +101,7 @@ router.post('/ngos', (req, res) => {
 // endpoint: get all ngos
 router.get('/ngos', async (req, res) => {
     try {
-        const ngos = await NGO.find({},'document_state name image description affinities');
+        const ngos = await NGO.find({document_state:'Approved'},'name image description affinities');
         res.status(200).json({ ngos: ngos });
     } catch (err) {
 
