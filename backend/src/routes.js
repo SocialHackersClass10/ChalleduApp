@@ -1,12 +1,12 @@
 const express = require('express');
 const { User, NGO } = require("./Schema");
+const bcrypt = require('bcrypt');
 const router = express.Router();
 const { isURL, ngoCheck } = require('./utils')
 
 //Route to get all users
 router.get('/users', async (req, res) => {
     const users = await User.find({});
-
     try {
         res.status(200).json({ users: users })
     } catch (err) {
@@ -29,11 +29,6 @@ router.get('/users/:id', async (req, res) => {
     };
 });
 
-
-router.post('/users', (req, res) => {
-    res.status(200).send(req.body)
-});
-
 router.post('/ngos', (req, res) => {
 
     //Validating the data posted to the database
@@ -50,6 +45,34 @@ router.post('/ngos', (req, res) => {
             res.status(500).json({ error: error })
         } else { res.status(201).json({ _id: ngo._id }) }
     })
+
+  // Update a user
+router.put("/users/:id", async (req, res) => {
+    const user_id = req.params.id;
+    const user_data = req.body;
+    try {
+      await User.findByIdAndUpdate(user_id, { $set: user_data });
+      res.status(200).json({ _id: user_id });
+    } catch (err) {
+      res.status(404).send({ error: err });
+    }
+  });
+
+router.post('/users', require('./middleware/middleware'), (req, res) => {
+    const newUser = new User(req.body)
+    const saltRounds = 10;
+    bcrypt.hash(newUser.password, saltRounds, function(err, hash) {
+        newUser.password = hash
+        newUser.save((err, doc) => {
+            if (!err) {
+                res.status(201).json({ user: doc })
+            } else {
+                res.status(400).json({
+                    message: err.message
+                })
+            }
+        });
+    });
 })
 
 module.exports = router;

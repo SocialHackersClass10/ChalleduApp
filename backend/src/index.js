@@ -1,6 +1,6 @@
-
 // dotenv: access local environmental constants / variables
-require('dotenv').config();
+//I change this part to adapt with O.S system
+require('dotenv/config');
 
 
 const express = require('express');
@@ -47,6 +47,3 @@ mongoose.connect(process.env.MONGODB_KEY, mongoConxParams, err => {
         });
     });
 });
-
-
-
