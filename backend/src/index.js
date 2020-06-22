@@ -2,12 +2,17 @@
 //I change this part to adapt with O.S system
 require('dotenv/config');
 
+
 const express = require('express');
 const path = require('path');
 const app = express();
 
+
+
 // import mongoose & models from our Schema
 const { mongoose, User, NGO, affinities } = require("./Schema");
+//import utils
+const { terminateServer } = require('./utils')
 
 // Middleware
 app.use(express.json())
@@ -24,7 +29,7 @@ const mongoConxParams = { useNewUrlParser: true, useUnifiedTopology: true };
 // server: initial greeting
 console.log('\nServer initialization ...\n');
 
-// dotenv: verify existing conncetion URL and credentials / terminate if missing
+// dotenv: verify existing connection URL and credentials / terminate if missing
 if (!process.env.MONGODB_KEY) {
     terminateServer('Missing database connection URL', { message: 'Please verify .env' });
 };
@@ -42,16 +47,3 @@ mongoose.connect(process.env.MONGODB_KEY, mongoConxParams, err => {
         });
     });
 });
-
-
-//Error from data
-// app.use(require('./middleware/error'))
-
-// log a message and stop the server
-function terminateServer(action, error = {}) {
-    const errorMsg = action + ':\n' +
-        (error.code ? `Code: ${error.code}` + '\n' : '') +
-        (error.message ? error.message + '\n' : '');
-    console.log(errorMsg, '\nThe Server is terminating.\n');
-    process.exit(1);
-};
