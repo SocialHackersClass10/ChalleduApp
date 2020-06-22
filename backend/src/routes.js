@@ -7,6 +7,7 @@ const { isURL, ngoCheck } = require('./utils')
 //Route to get all users
 router.get('/users', async (req, res) => {
     const users = await User.find({});
+
     try {
         res.status(200).json({ users: users })
     } catch (err) {
@@ -29,24 +30,7 @@ router.get('/users/:id', async (req, res) => {
     };
 });
 
-router.post('/ngos', (req, res) => {
-
-    //Validating the data posted to the database
-    ngoCheck(req, res);
-
-    //req.body destructuring in order not to repeat ourselves with req.body.key etc.
-    const { name, image, webpage, description, main_representative, affinities, contact: { address, phone, contact_hours }
-    } = req.body;
-
-    const ngo = new NGO({ document_state: 'Pending', name: name, image: image, webpage: webpage, description: description, main_representative: main_representative, affinities: affinities, contact: { address: address, phone: phone, contact_hours: contact_hours } });
-
-    ngo.save((error, ngo) => {
-        if (error) {
-            res.status(500).json({ error: error })
-        } else { res.status(201).json({ _id: ngo._id }) }
-    })
-
-  // Update a user
+// Update a user
 router.put("/users/:id", async (req, res) => {
     const user_id = req.params.id;
     const user_data = req.body;
@@ -73,6 +57,24 @@ router.post('/users', require('./middleware/middleware'), (req, res) => {
             }
         });
     });
+})
+
+router.post('/ngos', (req, res) => {
+
+    //Validating the data posted to the database
+    ngoCheck(req, res);
+
+    //req.body destructuring in order not to repeat ourselves with req.body.key etc.
+    const { name, image, webpage, description, main_representative, affinities, contact: { address, phone, contact_hours }
+    } = req.body;
+
+    const ngo = new NGO({ document_state: 'Pending', name: name, image: image, webpage: webpage, description: description, main_representative: main_representative, affinities: affinities, contact: { address: address, phone: phone, contact_hours: contact_hours } });
+
+    ngo.save((error, ngo) => {
+        if (error) {
+            res.status(500).json({ error: error })
+        } else { res.status(201).json({ _id: ngo._id }) }
+    })
 })
 
 module.exports = router;
