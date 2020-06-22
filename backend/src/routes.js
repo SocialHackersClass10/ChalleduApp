@@ -10,7 +10,11 @@ router.get('/users', async (req, res) => {
         const users = await User.find({});
         res.status(200).json({ users: users })
     } catch (err) {
-        res.status(500).send({ error: err })
+
+        // change: return only the .message instead of the complete error structure
+        // res.status(500).send({ error: err })
+        res.status(500).send({ error: err.message });
+
     }
 });
 
@@ -25,7 +29,11 @@ router.get('/users/:id', async (req, res) => {
             res.status(404).send({ error: `User with id ${req.params.id} not found.` });
         };
     } catch (err) {
-        res.status(500).send({ error: err });
+
+        // change: return only the .message instead of the complete error structure
+        // res.status(500).send({ error: err });
+        res.status(500).send({ error: err.message });
+
     };
 });
 
@@ -37,7 +45,11 @@ router.put("/users/:id", async (req, res) => {
       await User.findByIdAndUpdate(user_id, { $set: user_data });
       res.status(200).json({ _id: user_id });
     } catch (err) {
-      res.status(404).send({ error: err });
+
+      // change: return only the .message instead of the complete error structure
+      // res.status(404).send({ error: err });
+      res.status(404).send({ error: err.message });
+
     }
 });
 
@@ -52,7 +64,11 @@ router.post('/users', require('./middleware/middleware'), (req, res) => {
                 res.status(201).json({ user: doc })
             } else {
                 res.status(400).json({
-                    message: err.message
+
+                    // change: unify returning error
+                    // message: err.message
+                    error: err.message
+
                 })
             }
         });
@@ -73,7 +89,11 @@ router.post('/ngos', (req, res) => {
 
     ngo.save((error, ngo) => {
         if (error) {
-            res.status(500).json({ error: error })
+
+            // change: return only the .message instead of the complete error structure
+            // res.status(500).json({ error: error })
+            res.status(500).json({ error: error.message });
+
         } else { res.status(201).json({ _id: ngo._id }) }
     })
 })
@@ -84,7 +104,11 @@ router.get('/ngos', async (req, res) => {
         const ngos = await NGO.find({},'document_state name image description affinities');
         res.status(200).json({ ngos: ngos });
     } catch (err) {
-        res.status(500).send({ error: err });
+
+        // change: return only the .message instead of the complete error structure
+        // res.status(500).send({ error: err });
+        res.status(500).send({ error: err.message });
+
     };
 });
 
