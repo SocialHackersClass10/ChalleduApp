@@ -4,18 +4,21 @@ const bcrypt = require('bcrypt');
 const router = express.Router();
 const { isURL, ngoCheck } = require('./utils')
 
-//Route to get all users
+// endpoint: get all users
 router.get('/users', async (req, res) => {
-    const users = await User.find({});
-
     try {
+        const users = await User.find({});
         res.status(200).json({ users: users })
     } catch (err) {
-        res.status(500).send({ error: err })
+
+        // change: return only the .message instead of the complete error structure
+        // res.status(500).send({ error: err })
+        res.status(500).send({ error: err.message });
+
     }
 });
 
-//route to get a single user
+// endpoint: get single user
 router.get('/users/:id', async (req, res) => {
     try {
         let user = await User.findById(req.params.id);
@@ -26,11 +29,15 @@ router.get('/users/:id', async (req, res) => {
             res.status(404).send({ error: `User with id ${req.params.id} not found.` });
         };
     } catch (err) {
-        res.status(500).send({ error: err });
+
+        // change: return only the .message instead of the complete error structure
+        // res.status(500).send({ error: err });
+        res.status(500).send({ error: err.message });
+
     };
 });
 
-// Update a user
+// endpoint: Update a user
 router.put("/users/:id", async (req, res) => {
     const user_id = req.params.id;
     const user_data = req.body;
@@ -38,10 +45,15 @@ router.put("/users/:id", async (req, res) => {
       await User.findByIdAndUpdate(user_id, { $set: user_data });
       res.status(200).json({ _id: user_id });
     } catch (err) {
-      res.status(404).send({ error: err });
-    }
-  });
 
+      // change: return only the .message instead of the complete error structure
+      // res.status(404).send({ error: err });
+      res.status(404).send({ error: err.message });
+
+    }
+});
+
+// endpoint: insert a user
 router.post('/users', require('./middleware/middleware'), (req, res) => {
     const newUser = new User(req.body)
     const saltRounds = 10;
@@ -52,13 +64,18 @@ router.post('/users', require('./middleware/middleware'), (req, res) => {
                 res.status(201).json({ user: doc })
             } else {
                 res.status(400).json({
-                    message: err.message
+
+                    // change: unify returning error
+                    // message: err.message
+                    error: err.message
+
                 })
             }
         });
     });
 })
 
+// endpoint: insert an NGO
 router.post('/ngos', (req, res) => {
 
     //Validating the data posted to the database
@@ -72,9 +89,27 @@ router.post('/ngos', (req, res) => {
 
     ngo.save((error, ngo) => {
         if (error) {
-            res.status(500).json({ error: error })
+
+            // change: return only the .message instead of the complete error structure
+            // res.status(500).json({ error: error })
+            res.status(500).json({ error: error.message });
+
         } else { res.status(201).json({ _id: ngo._id }) }
     })
 })
+
+// endpoint: get all ngos
+router.get('/ngos', async (req, res) => {
+    try {
+        const ngos = await NGO.find({document_state:'Approved'},'name image description affinities');
+        res.status(200).json({ ngos: ngos });
+    } catch (err) {
+
+        // change: return only the .message instead of the complete error structure
+        // res.status(500).send({ error: err });
+        res.status(500).send({ error: err.message });
+
+    };
+});
 
 module.exports = router;
