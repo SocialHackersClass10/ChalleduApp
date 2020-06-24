@@ -5,7 +5,7 @@
     "main": "index.js",
     "scripts": {
         "start": "nodemon ./src/index.js",
-        "precommit": "./node_modules/eslint/bin/eslint.js --fix"
+        "precommit": "npx eslint --fix src/*.js"
     },
     "husky": {
         "hooks": {
