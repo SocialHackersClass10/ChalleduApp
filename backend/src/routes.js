@@ -42,13 +42,13 @@ router.put("/users/:id", async (req, res) => {
     const user_id = req.params.id;
     const user_data = req.body;
     try {
-      await User.findByIdAndUpdate(user_id, { $set: user_data });
-      res.status(200).json({ _id: user_id });
+        await User.findByIdAndUpdate(user_id, { $set: user_data });
+        res.status(200).json({ _id: user_id });
     } catch (err) {
 
-      // change: return only the .message instead of the complete error structure
-      // res.status(404).send({ error: err });
-      res.status(404).send({ error: err.message });
+        // change: return only the .message instead of the complete error structure
+        // res.status(404).send({ error: err });
+        res.status(404).send({ error: err.message });
 
     }
 });
@@ -57,7 +57,7 @@ router.put("/users/:id", async (req, res) => {
 router.post('/users', require('./middleware/middleware'), (req, res) => {
     const newUser = new User(req.body)
     const saltRounds = 10;
-    bcrypt.hash(newUser.password, saltRounds, function(err, hash) {
+    bcrypt.hash(newUser.password, saltRounds, function (err, hash) {
         newUser.password = hash
         newUser.save((err, doc) => {
             if (!err) {
@@ -101,7 +101,7 @@ router.post('/ngos', (req, res) => {
 // endpoint: get all ngos
 router.get('/ngos', async (req, res) => {
     try {
-        const ngos = await NGO.find({document_state:'Approved'},'name image description affinities');
+        const ngos = await NGO.find({ document_state: 'Approved' }, 'name image description affinities');
         res.status(200).json({ ngos: ngos });
     } catch (err) {
 
@@ -111,5 +111,20 @@ router.get('/ngos', async (req, res) => {
 
     };
 });
+
+
+// endpoint: Update an NGO
+router.put("/ngos/:id", async (req, res) => {
+    const ngo_id = req.params.id;
+    const ngo_data = req.body;
+    try {
+        await NGO.findByIdAndUpdate(ngo_id, { $set: ngo_data });
+        res.status(200).json({ _id: ngo_id });
+    } catch (err) {
+        res.status(404).send({ error: err.message });
+    }
+});
+
+
 
 module.exports = router;
