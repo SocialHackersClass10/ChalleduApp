@@ -125,6 +125,4 @@ router.put("/ngos/:id", async (req, res) => {
     }
 });
 
-
-
 module.exports = router;

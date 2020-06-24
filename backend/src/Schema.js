@@ -20,14 +20,14 @@ const affinitiesArray = [
 
 // addition for issue#38-document-approval-schema-modification
 // here: define possible documentStates
-const documentStates = [ 'Approved', 'Pending', 'Rejected' ];
+const documentStates = ['Approved', 'Pending', 'Rejected'];
 
 // keep schema and model in singular
 const userSchema = mongoose.Schema({
     // addition for issue#38-document-approval-schema-modification
     // here: substitute former field with new
     //  approval_pending: Boolean,
-    document_state: [{type:String, enum: documentStates}],
+    document_state: [{ type: String, enum: documentStates }],
     username: { type: String, trim: true },
     password: { type: String, required: true, trim: true },
     email: { type: String, required: true, trim: true },
@@ -53,7 +53,8 @@ const userSchema = mongoose.Schema({
 
 // keep schema and model in singular
 const NGOSchema = mongoose.Schema({
-    document_state: [{type:String, enum: documentStates}],    name: { type: String, trim: true, required: true },
+    document_state: [{ type: String, enum: documentStates }],
+    name: { type: String, trim: true, required: true },
     image: { type: String, trim: true },
     webpage: { type: String, trim: true, required: true },
     description: { type: String, trim: true, required: true },
