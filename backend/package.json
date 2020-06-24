@@ -15,7 +15,7 @@
     "lint-staged": {
         "*.js": [
             "npm run precommit",
-            "git commit -a"
+            "git add"
         ]
     },
     "repository": "https://github.com/SocialHackersClass10/ChalleduApp",
