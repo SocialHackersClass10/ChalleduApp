@@ -58,9 +58,7 @@ router.post('/users', require('./middleware/middleware'), async(req, res) => {
     const newUser = new User(req.body)
     const saltRounds = 10;
     let newUserEmail = req.body.email
-        // console.log(newUser.email)
     newUserEmail = await User.countDocuments({ email: newUserEmail })
-    console.log()
     if (newUserEmail <= 0) {
         bcrypt.hash(newUser.password, saltRounds, function(err, hash) {
             newUser.password = hash
@@ -79,7 +77,7 @@ router.post('/users', require('./middleware/middleware'), async(req, res) => {
             });
         });
     } else {
-        res.status(400).json({ error: "this email already exist" })
+        res.status(400).json({ error: "Could not create user. The email already exists." })
     }
 })
 
