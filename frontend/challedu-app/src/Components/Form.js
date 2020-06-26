@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import UserContext from "./userContext";
+import UserContext from "../userContext";
 
 const Form = () => {
   //whatever user types reseting the value
@@ -8,7 +8,7 @@ const Form = () => {
   const user = useContext(UserContext);
 
   const handleChange = event => {
-    const { name, value } = event.target; //here we have to useContext i think
+    const { name, value } = event.target; 
 
     setValues({
       ...values,
@@ -22,6 +22,7 @@ const Form = () => {
     submit();
   };
 
+  //
   function submit() {
     fetch("..../auth/login", {
       method: "post",
@@ -34,6 +35,7 @@ const Form = () => {
           user.login(data.user);
         } else {
           // handle error: user doesn't exist....
+          console.log("User doesn't exist..");
         }
       });
   }
