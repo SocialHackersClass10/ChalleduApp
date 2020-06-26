@@ -1,10 +1,10 @@
 
 import React, { useState } from "react";
-import Form from "./components/Form";
+import Form from "./Components/Form";
 import UserContext from "./userContext";
 import './App.css';
-import Welcome from "./components/welcome";
-import Navbar from "./components/navbar";
+import Welcome from "./Components/welcome";
+import Navbar from "./Components/navbar";
 
 const App = () => {
   const [user, setUser] = useState({});
