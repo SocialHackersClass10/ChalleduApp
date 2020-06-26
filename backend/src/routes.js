@@ -125,4 +125,16 @@ router.get('/ngos', async(req, res) => {
     };
 });
 
+// endpoint: Update an NGO
+router.put("/ngos/:id", async (req, res) => {
+    const ngo_id = req.params.id;
+    const ngo_data = req.body;
+    try {
+        await NGO.findByIdAndUpdate(ngo_id, { $set: ngo_data });
+        res.status(200).json({ _id: ngo_id });
+    } catch (err) {
+        res.status(404).send({ error: err.message });
+    }
+});
+
 module.exports = router;
