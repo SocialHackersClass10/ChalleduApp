@@ -15,7 +15,8 @@ const App = () => {
 
   function logout() {
     setUser({});
-
+  }
+  
   return (
     <div id="root">
     <UserContext.Provider
@@ -30,8 +31,8 @@ const App = () => {
      <Navbar/> 
      <Welcome/>
      </div>
-  );
-}
+  )
+
 };
 
 export default App;
