@@ -1,15 +1,37 @@
-import React from 'react';
+
+import React, { useState } from "react";
+import Form from "./Components/Form";
+import UserContext from "./userContext";
 import './App.css';
 import Welcome from "./components/welcome";
 import Navbar from "./components/navbar";
 
-function App() {
+const App = () => {
+  const [user, setUser] = useState({});
+
+  function login(user) {
+    setUser(user);
+  }
+
+  function logout() {
+    setUser({});
+
   return (
     <div id="root">
-    <Navbar/> 
-    <Welcome/>
-    </div>
+    <UserContext.Provider
+      value={{
+        user: user,
+        login: login,
+        logout: logout
+      }}
+    >
+      <Form />
+    </UserContext.Provider> 
+     <Navbar/> 
+     <Welcome/>
+     </div>
   );
 }
+};
 
 export default App;
