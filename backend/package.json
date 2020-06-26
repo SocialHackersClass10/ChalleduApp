@@ -4,7 +4,19 @@
     "description": "The backend side for the Challedu project",
     "main": "index.js",
     "scripts": {
-        "start": "nodemon ./src/index.js"
+        "start": "nodemon ./src/index.js",
+        "lint": "eslint --fix src/*.js"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
+    },
+    "lint-staged": {
+        "*.js": [
+            "npm run lint",
+            "git add"
+        ]
     },
     "repository": "https://github.com/SocialHackersClass10/ChalleduApp",
     "author": "Social Hackers Academy Class 10",
@@ -17,5 +29,12 @@
         "formidable": "^1.2.2",
         "mongoose": "^5.9.18",
         "mongoose-gridfs": "^1.2.43"
+    },
+    "devDependencies": {
+        "eslint": "^7.2.0",
+        "eslint-config-airbnb-base": "^14.2.0",
+        "eslint-plugin-import": "^2.21.2",
+        "husky": "^4.2.5",
+        "lint-staged": "^10.2.11"
     }
 }
