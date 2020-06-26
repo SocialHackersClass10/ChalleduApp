@@ -1,3 +1,4 @@
+
 // this is our server and port address
 // the base of all AJAX requests
 const API_URL = "http://localhost:4321/";
@@ -23,11 +24,12 @@ async function issueAJAXRequest(method, endpoint, body = {}) {
     params.headers = { "Content-Type": "application/json; charset=utf-8" };
     params.body = JSON.stringify(body);
   }
-  const result = await fetch(API_URL + endpoint, params);
+  const res = await fetch(API_URL + endpoint, params);
   if (!res.ok || res.status < 200 || res.status > 299) {
     const errorMessage = `HTTP ${res.status} - ${res.statusText}`;
     console.log(errorMessage);
     throw new Error(errorMessage);
   }
-  return await result.json();
+  return await res.json();
 }
+
