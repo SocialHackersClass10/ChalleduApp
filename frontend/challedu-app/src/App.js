@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import Form from "./Components/Form";
+import Form from "./components/Form";
 import UserContext from "./userContext";
 import './App.css';
 import Welcome from "./components/welcome";
