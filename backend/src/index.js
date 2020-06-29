@@ -6,10 +6,17 @@ const express = require('express');
 const path = require('path');
 const app = express();
 
+// add cors support: import module
+var cors = require('cors');
+
 // import mongoose & models from our Schema
 const { mongoose, User, NGO, affinities } = require("./Schema");
 //import utils
 const { terminateServer } = require('./utils')
+
+// add cors support: pre-flight cors
+app.use(cors());
+app.options('*', cors());
 
 // Middleware
 app.use(express.json())
@@ -44,5 +51,4 @@ mongoose.connect(process.env.MONGODB_KEY, mongoConxParams, err => {
         });
     });
 });
-
 
