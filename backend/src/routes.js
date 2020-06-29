@@ -2,7 +2,10 @@ const express = require('express');
 const { User, NGO } = require("./Schema");
 const bcrypt = require('bcrypt');
 const router = express.Router();
-const { isURL, ngoCheck } = require('./utils')
+const { isURL, ngoCheck, saltRounds } = require('./utils')
+const jwt = require('jsonwebtoken');
+require('dotenv/config');
+
 
 // endpoint: get all users
 router.get('/users', async(req, res) => {
@@ -56,7 +59,6 @@ router.put("/users/:id", async(req, res) => {
 // endpoint: insert a user
 router.post('/users', require('./middleware/middleware'), async(req, res) => {
     const newUser = new User(req.body)
-    const saltRounds = 10;
     let newUserEmail = req.body.email
     newUserEmail = await User.countDocuments({ email: newUserEmail })
     if (newUserEmail <= 0) {
@@ -136,5 +138,37 @@ router.put("/ngos/:id", async (req, res) => {
         res.status(404).send({ error: err.message });
     }
 });
+
+//route for login
+router.post('/auth/login', async (req,res) => {
+    const email = req.body.email;
+    const password = await bcrypt.hash(req.body.password, saltRounds);
+    const user = await User.find({document_state:'Approved', email: email, password: password});
+    if (user) {
+        res.status(200).json(createJWTs(user.id, user.role));
+    } else {
+        res.status(401).json({ error: "You provided wrong set of credentials." });
+    };
+});
+
+
+function createJWTs(id, role){
+    const iat = new Date();
+    const exp = new Date();
+
+    let payload = {
+        id,
+        iat,
+        exp: exp.setDate(iat.getDate()+7) 
+    }
+
+    const refresh_token = jwt.sign(payload, process.env.REFRESH_TOKEN_KEY, { expiresIn: "168h" });
+    payload.role = role;
+    payload.exp = exp.setDate(iat.getDate()+1);
+    const access_token = jwt.sign(payload, process.env.ACCESS_TOKEN_KEY, { expiresIn: "24h" });
+
+    return {access_token, refresh_token};
+}
+
 
 module.exports = router;

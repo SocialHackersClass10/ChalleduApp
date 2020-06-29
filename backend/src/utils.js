@@ -32,6 +32,7 @@ function ngoCheck(req, res) {
     } else return;
 }
 
+module.exports.saltRounds = 10;
 module.exports.terminateServer = terminateServer;
 module.exports.isURL = isURL;
 module.exports.ngoCheck = ngoCheck;
