@@ -4,8 +4,8 @@
 const API_URL = "http://localhost:4321/";
 
 export default class APIUtils {
-  static async get(url) {
-    return await issueAJAXRequest("GET", url);
+  static async get(url, access_token) {
+    return await issueAJAXRequest("GET", url, {}, access_token);
   }
   static async delete(url) {
     return await issueAJAXRequest("DELETE", url);
@@ -18,10 +18,13 @@ export default class APIUtils {
   }
 }
 
-async function issueAJAXRequest(method, endpoint, body = {}) {
+async function issueAJAXRequest(method, endpoint, body = {}, access_token = "") {
   const params = { method };
   if (Object.keys(body).length > 0) {
-    params.headers = { "Content-Type": "application/json; charset=utf-8" };
+    params.headers = { 
+      "Content-Type": "application/json; charset=utf-8", 
+      "access_token": access_token 
+    };
     params.body = JSON.stringify(body);
   }
   const res = await fetch(API_URL + endpoint, params);

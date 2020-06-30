@@ -8,21 +8,28 @@ import Navbar from "./Components/navbar";
 
 const App = () => {
   const [user, setUser] = useState({});
+  const [tokens, setTokens] = useState({});
 
-  function login(user) {
+  function loginTokens(tokens) {
+    setTokens(tokens);
+  }
+
+  function loginUser(user) {
     setUser(user);
   }
 
   function logout() {
     setUser({});
+    setTokens({});
   }
   
   return (
-    <div id="root">
     <UserContext.Provider
       value={{
         user: user,
-        login: login,
+        tokens: tokens,
+        loginTokens: loginTokens,
+        loginUser: loginUser,
         logout: logout
       }}>
       <Navbar/>
@@ -35,8 +42,6 @@ const App = () => {
       
     </UserContext.Provider>
   );      
-     </div>
-  )
 };
 
 export default App;
