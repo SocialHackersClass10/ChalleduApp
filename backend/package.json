@@ -28,8 +28,10 @@
         "dotenv": "^8.2.0",
         "express": "^4.17.1",
         "formidable": "^1.2.2",
+        "jsonwebtoken": "^8.5.1",
         "mongoose": "^5.9.18",
-        "mongoose-gridfs": "^1.2.43"
+        "mongoose-gridfs": "^1.2.43",
+        "nodemon": "^2.0.4"
     },
     "devDependencies": {
         "eslint": "^7.2.0",

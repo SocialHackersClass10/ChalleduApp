@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
 import UserContext from "../userContext";
+import UserProvider from "../UserProvider";
 
 const Form = () => {
   //whatever user types reseting the value
@@ -24,7 +25,7 @@ const Form = () => {
 
   //
   function submit() {
-    fetch("..../auth/login", {
+    fetch("http://localhost:4321/auth/login", {
       method: "post",
       body: JSON.stringify(values),
       headers: { "Content-Type": "application/json" }
@@ -32,7 +33,20 @@ const Form = () => {
       .then(res => res.json())
       .then(data => {
         if (!data.error) {
-          user.login(data.user);
+          //save the tokens
+          user.loginTokens({
+            access_token: data.access_token,
+            refresh_token: data.refresh_token
+          });
+
+          //seperate the payload from the access_token and decode it from base64
+          let accessToken = data.access_token;
+          let payload = accessToken.split(".")[1];
+          payload = JSON.parse(atob(payload));
+          
+          //fetch and save the user
+          user.loginUser(UserProvider.getUser(payload.id, data.access_token));
+
         } else {
           // handle error: user doesn't exist....
           console.log("User doesn't exist..");

@@ -147,7 +147,7 @@ router.post('/auth/login', async (req,res) => {
     const password = await bcrypt.hash(req.body.password, saltRounds);
     const user = await User.find({document_state:'Approved', email: email, password: password});
     if (user) {
-        res.status(200).json(createJWTs(user.id, user.role));
+        res.status(200).json(createJWTs(user._id, user.role));
     } else {
         res.status(401).json({ error: "You provided wrong set of credentials." });
     };
