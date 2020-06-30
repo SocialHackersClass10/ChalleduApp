@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
 import UserContext from "../userContext";
+import UserProvider from "../UserProvider";
 
 const Form = () => {
   //whatever user types reseting the value
@@ -24,7 +25,7 @@ const Form = () => {
 
   //
   function submit() {
-    fetch("..../auth/login", {
+    fetch("http://localhost:4321/auth/login", {
       method: "post",
       body: JSON.stringify(values),
       headers: { "Content-Type": "application/json" }
@@ -42,7 +43,7 @@ const Form = () => {
           let accessToken = data.access_token;
           let payload = accessToken.split(".")[1];
           payload = JSON.parse(atob(payload));
-
+          
           //fetch and save the user
           user.loginUser(UserProvider.getUser(payload.id, data.access_token));
 
