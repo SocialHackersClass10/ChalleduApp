@@ -4,7 +4,7 @@ export const UserContext = React.createContext({
   user: {},
   tokens: {},
   loginTokens: tokens => {},
-  loginsUser: user => {},
+  loginUser: user => {},
   logout: () => {}
 });
 
