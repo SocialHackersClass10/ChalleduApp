@@ -1,8 +1,8 @@
-
 import React, { useState } from "react";
 import Form from "./Components/Form";
+import AllUsersList from "./Components/AllUsersList";
 import UserContext from "./userContext";
-import './App.css';
+import {BrowserRouter as Router, Route} from "react-router-dom";
 import Welcome from "./Components/welcome";
 import Navbar from "./Components/navbar";
 
@@ -24,15 +24,19 @@ const App = () => {
         user: user,
         login: login,
         logout: logout
-      }}
-    >
-      <Form />
-    </UserContext.Provider> 
-     <Navbar/> 
-     <Welcome/>
+      }}>
+      <Navbar/>
+       <Router>
+          <Route exact path = "/" component = {Welcome}/>
+          <Route exact path = "/login" component = {Form}/>
+          <Route exact path = "/usersList" component = {AllUsersList}/>
+        
+      </Router>
+      
+    </UserContext.Provider>
+  );      
      </div>
   )
-
 };
 
 export default App;
