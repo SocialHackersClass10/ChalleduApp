@@ -26,3 +26,5 @@ Positive connection feedback has been reported for both Linux and Windows O.S.
 If, for any reason there is a connectivity problem, I have found the following online resource to be very helpful:
 [Node dotenv is not working](http://stackoverflow.com/questions/26973484/ddg#43973629)
 
+#### About JWT KEYS
+The access and refresh token keys are in .env file..
