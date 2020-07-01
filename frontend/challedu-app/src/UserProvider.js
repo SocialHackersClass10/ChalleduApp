@@ -4,8 +4,8 @@ export default class UserProvider {
   static async getUsers() {
     return await APIUtils.get("users/");
   }
-  static async getUser(id) {
-    return await APIUtils.get(`users/${id}`);
+  static async getUser(id, access_token) {
+    return await APIUtils.get(`users/${id}`, access_token);
   }
   static async createUser(userData) {
     return await APIUtils.post("users/", userData);

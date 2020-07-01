@@ -11,7 +11,7 @@ const buttonStyle = {maxWidth: 200, margin: '0 auto 10px'};
 export default class welcome extends Component {
     render() {
         return (
-            <div class="welcome">
+            <div className="welcome">
                 <img id="logo" src={logo} alt="logo"/>
                 <div id="welcome_msg">
                     <h3>Welcome to our platform</h3>

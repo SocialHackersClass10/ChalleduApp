@@ -10,16 +10,16 @@ export default class navbar extends Component {
                 <Navbar color="warning" expand="md">
                     <NavbarBrand><img id="navlogo" src={logo} alt="logo"/></NavbarBrand>
                         <Nav className="mr-auto" navbar>
-                            <NavItem class="nav_button">
+                            <NavItem className="nav_button">
                                 <Button outline color="danger">Home</Button>
                             </NavItem>
-                            <NavItem class="nav_button">
+                            <NavItem className="nav_button">
                                 <Button outline color="success">Users</Button>
                             </NavItem>
-                            <NavItem class="nav_button">
+                            <NavItem className="nav_button">
                                 <Button outline color="success">NGO</Button>
                             </NavItem>
-                            <NavItem class="nav_button">
+                            <NavItem className="nav_button">
                                 <Button outline color="info">Profile</Button>
                             </NavItem>
                         </Nav>
