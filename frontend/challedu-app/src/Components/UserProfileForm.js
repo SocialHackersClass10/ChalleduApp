@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import UserProvider from "../UserProvider";
 import { Button,Label, Card, CardBody, Col, Container, 
   Form, Input, InputGroup, CardText, Row } from 'reactstrap';
 
@@ -35,16 +36,9 @@ class UserProfileForm extends Component {
     e.preventDefault();
 
     const { fullName, description, email,address,phone,picture  } = this.state;
-    const body = {
-      fullName, description, email,address,phone,picture
-    };
-    const json = JSON.stringify(body);
-    console.log(json);
+    const userData = {fullName, description, email,address,phone,picture };
 
-    // axios.put('http://localhost:3000/api/user/' + this.props.data, json)
-    //   .then(response => {
-    //     //
-    //   });
+   UserProvider.updateUser(userData);
   }
 
   render() {
@@ -94,7 +88,7 @@ class UserProfileForm extends Component {
                     </Button>
                   </Form>
                 </CardBody>
-              </Card>
+              </Card> 
             </Col>
           </Row>
         </Container>
