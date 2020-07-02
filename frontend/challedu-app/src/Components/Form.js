@@ -1,6 +1,15 @@
 import React, { useState, useContext } from "react";
 import UserContext from "../userContext";
 import UserProvider from "../UserProvider";
+import {Link} from "react-router-dom"
+import { Button } from 'reactstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import '../App.css';
+import logo from '../images/logo.svg';
+
+
+const buttonStyle = { maxWidth: 200, margin: '20px  auto 10px ' };
+
 
 const Form = () => {
   //whatever user types reseting the value
@@ -55,7 +64,12 @@ const Form = () => {
   }
 
   return (
-    <div>
+    <div className= "welcome">
+      <img id="logo" src={logo} alt="logo" />
+      <div id="welcome_msg">
+                <h3>Registration</h3>
+            </div>
+            
       <form onSubmit={handleSubmit}>
         <div>
           <label>Email</label>
@@ -82,7 +96,11 @@ const Form = () => {
           />
         </div>
         <div>
-          <button type="submit">Log in </button>
+        <div id="welcome_buttons " style={buttonStyle}>
+          <Link to = "/main">
+          <Button  color="success" bsStyle="primary" bsSize="large" block type="submit"> Log In </Button>
+          </Link>
+        </div>
         </div>
       </form>
     </div>
