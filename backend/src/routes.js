@@ -1,16 +1,16 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const jwt_Mid = require('express-jwt');
+const jwtMiddleware = require('express-jwt');
 const { User, NGO } = require('./Schema');
 
 const router = express.Router();
 const { isURL, ngoCheck, saltRounds } = require('./utils');
 require('dotenv/config');
 
-const validateRoles = require('./middleware/validate-Roles');
+const validateRoles = require('./middleware/validateRoles');
 // endpoint: get all users
-router.get('/users', jwt_Mid({ secret: process.env.ACCESS_TOKEN_KEY }), validateRoles(['user-ngo', 'user-independent', 'admin']), async(req, res) => {
+router.get('/users', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY }), validateRoles(['user-ngo', 'user-independent', 'admin']), async(req, res) => {
     try {
         const users = await User.find({});
         res.status(200).json({ users });
@@ -22,7 +22,7 @@ router.get('/users', jwt_Mid({ secret: process.env.ACCESS_TOKEN_KEY }), validate
 });
 
 // endpoint: get single user
-router.get('/users/:id', jwt_Mid({ secret: process.env.ACCESS_TOKEN_KEY }), validateRoles(['user-ngo', 'user-independent', 'admin']), async(req, res) => {
+router.get('/users/:id', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY }), validateRoles(['user-ngo', 'user-independent', 'admin']), async(req, res) => {
     try {
         const user = await User.findById(req.params.id);
         if (user) {
@@ -39,7 +39,7 @@ router.get('/users/:id', jwt_Mid({ secret: process.env.ACCESS_TOKEN_KEY }), vali
 });
 
 // endpoint: Update a user
-router.put('/users/:id', jwt_Mid({ secret: process.env.ACCESS_TOKEN_KEY }), validateRoles(['admin']), async(req, res) => {
+router.put('/users/:id', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY }), validateRoles(['admin']), async(req, res) => {
     const user_id = req.params.id;
     const user_data = req.body;
     try {
@@ -80,7 +80,7 @@ router.post('/users', require('./middleware/middleware'), async(req, res) => {
 });
 
 // endpoint: insert an NGO
-router.post('/ngos', jwt_Mid({ secret: process.env.ACCESS_TOKEN_KEY }), validateRoles(['user-ngo', 'admin']), (req, res) => {
+router.post('/ngos', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY }), validateRoles(['user-ngo', 'admin']), (req, res) => {
     // Validating the data posted to the database
     ngoCheck(req, res);
 
@@ -107,7 +107,7 @@ router.post('/ngos', jwt_Mid({ secret: process.env.ACCESS_TOKEN_KEY }), validate
 });
 
 // endpoint: get all ngos
-router.get('/ngos', jwt_Mid({ secret: process.env.ACCESS_TOKEN_KEY }), validateRoles(['user-ngo', 'user-independent', 'admin']), async(req, res) => {
+router.get('/ngos', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY }), validateRoles(['user-ngo', 'user-independent', 'admin']), async(req, res) => {
     try {
         const ngos = await NGO.find({ document_state: 'Approved' }, 'name image description affinities');
         res.status(200).json({ ngos });
@@ -119,7 +119,7 @@ router.get('/ngos', jwt_Mid({ secret: process.env.ACCESS_TOKEN_KEY }), validateR
 });
 
 // endpoint: Update an NGO
-router.put('/ngos/:id', jwt_Mid({ secret: process.env.ACCESS_TOKEN_KEY }), validateRoles(['admin']), async(req, res) => {
+router.put('/ngos/:id', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY }), validateRoles(['admin']), async(req, res) => {
     const ngo_id = req.params.id;
     const ngo_data = req.body;
     try {
@@ -131,7 +131,7 @@ router.put('/ngos/:id', jwt_Mid({ secret: process.env.ACCESS_TOKEN_KEY }), valid
 });
 
 // Get single ngo
-router.get('/ngos/:id', jwt_Mid({ secret: process.env.ACCESS_TOKEN_KEY }), validateRoles(['user-ngo', 'user-independent', 'admin']), async(req, res) => {
+router.get('/ngos/:id', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY }), validateRoles(['user-ngo', 'user-independent', 'admin']), async(req, res) => {
     try {
         const ngo = await NGO.findById(req.params.id);
         if (ngo) {
