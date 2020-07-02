@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import UserProvider from "../UserProvider";
 import { Button, Card, CardBody, Col, Container, 
     Form, Input, InputGroup, Row } from 'reactstrap';
 
@@ -33,23 +34,12 @@ export default class RegisterComponent extends Component {
         if(this.Password!==this.Password2){
             alert('Ooppps ! Your password doesn`t match') 
         }
-        fetch("http://localhost:4321/", {
-            method: 'POST',
-            headers: { 'Content-Type': 'application.json' },
-            body: JSON.stringify({
-                Email: this.state.Email,
-                Password: this.state.Password,
-                NgoMentor: this.state.NgoMentor,
-            })
-        })
-        .then((Response) => Response.json())
-        .then((result) => {
-            console.log(result)
-            if (result.Status === 'Success')
-                this.props.history.push("/UserProfileComponent");
-            else 
-            alert('Ooppps !!!! Sorrrrrry !!!!!')
-        })
+        
+        const { Email, Password, NgoMentor  } = this.state;
+        const userData = {Email, Password, NgoMentor }; 
+
+   UserProvider.createUser(userData);
+
     }
     render() {
         return(
