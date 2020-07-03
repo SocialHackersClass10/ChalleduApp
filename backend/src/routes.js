@@ -10,7 +10,7 @@ require('dotenv/config');
 
 const validateRoles = require('./middleware/validateRoles');
 // endpoint: get all users
-router.get('/users', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY }), validateRoles(['user-ngo', 'user-independent', 'admin']), async(req, res) => {
+router.get('/users', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algorithms: ['HS256'] }), validateRoles(['user-ngo', 'user-independent', 'admin']), async (req, res) => {
     try {
         const users = await User.find({});
         res.status(200).json({ users });
@@ -22,7 +22,7 @@ router.get('/users', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY }), va
 });
 
 // endpoint: get single user
-router.get('/users/:id', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY }), validateRoles(['user-ngo', 'user-independent', 'admin']), async(req, res) => {
+router.get('/users/:id', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algorithms: ['HS256'] }), validateRoles(['user-ngo', 'user-independent', 'admin']), async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
         if (user) {
@@ -39,7 +39,7 @@ router.get('/users/:id', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY })
 });
 
 // endpoint: Update a user
-router.put('/users/:id', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY }), validateRoles(['admin']), async(req, res) => {
+router.put('/users/:id', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algorithms: ['HS256'] }), validateRoles(['admin']), async (req, res) => {
     const user_id = req.params.id;
     const user_data = req.body;
     try {
@@ -53,7 +53,7 @@ router.put('/users/:id', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY })
 });
 
 // endpoint: insert a user
-router.post('/users', require('./middleware/middleware'), async(req, res) => {
+router.post('/users', require('./middleware/middleware'), async (req, res) => {
     const newUser = new User(req.body);
     let newUserEmail = req.body.email;
     newUserEmail = await User.countDocuments({ email: newUserEmail });
@@ -80,7 +80,7 @@ router.post('/users', require('./middleware/middleware'), async(req, res) => {
 });
 
 // endpoint: insert an NGO
-router.post('/ngos', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY }), validateRoles(['user-ngo', 'admin']), (req, res) => {
+router.post('/ngos', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algorithms: ['HS256'] }), validateRoles(['user-ngo', 'admin']), (req, res) => {
     // Validating the data posted to the database
     ngoCheck(req, res);
 
@@ -107,7 +107,7 @@ router.post('/ngos', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY }), va
 });
 
 // endpoint: get all ngos
-router.get('/ngos', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY }), validateRoles(['user-ngo', 'user-independent', 'admin']), async(req, res) => {
+router.get('/ngos', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algorithms: ['HS256'] }), validateRoles(['user-ngo', 'user-independent', 'admin']), async (req, res) => {
     try {
         const ngos = await NGO.find({ document_state: 'Approved' }, 'name image description affinities');
         res.status(200).json({ ngos });
@@ -119,7 +119,7 @@ router.get('/ngos', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY }), val
 });
 
 // endpoint: Update an NGO
-router.put('/ngos/:id', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY }), validateRoles(['admin']), async(req, res) => {
+router.put('/ngos/:id', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algorithms: ['HS256'] }), validateRoles(['admin']), async (req, res) => {
     const ngo_id = req.params.id;
     const ngo_data = req.body;
     try {
@@ -131,7 +131,7 @@ router.put('/ngos/:id', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY }),
 });
 
 // Get single ngo
-router.get('/ngos/:id', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY }), validateRoles(['user-ngo', 'user-independent', 'admin']), async(req, res) => {
+router.get('/ngos/:id', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algorithms: ['HS256'] }), validateRoles(['user-ngo', 'user-independent', 'admin']), async (req, res) => {
     try {
         const ngo = await NGO.findById(req.params.id);
         if (ngo) {
@@ -147,10 +147,10 @@ router.get('/ngos/:id', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY }),
 
 // route for login
 router.post('/auth/login', async(req, res) => {
-    const { email } = req.body;
+    const { email, password } = req.body;
     const user = await User.find({ document_state: 'Approved', email });
-    if (user == null) res.status(401).json({ error: 'You provided wrong set of credentials.' });
-    if (await bcrypt.compare(req.body.password, user[0].password)) {
+    if (user == null) return res.status(401).json({ error: 'You provided wrong set of credentials.' });
+    if (await bcrypt.compare(password, user[0].password)) {
         res.status(200).json(createJWTs(user[0].id, user[0].role));
     } else {
         res.status(401).json({ error: 'You provided wrong set of credentials.' });
