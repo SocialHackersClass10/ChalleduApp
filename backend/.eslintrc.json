@@ -22,10 +22,6 @@
             "error",
             "single"
         ],
-        "semi": [
-            "error",
-            "never"
-        ],
         "space-before-function-paren": [
             "error",
             "never"
@@ -35,9 +31,9 @@
             "never"
         ],
         "no-console": "off",
-        "max-len": ["error", { "code": 80 }],
+        "max-len": ["error", { "code": 200 }],
         "no-unused-vars": "off",
-        "tno-useless-return": "off",
+        "no-useless-return": "off",
         "no-use-before-define": "off",
         "object-curly-newline": "off",
         "prefer-arrow-callback": "off",
@@ -45,6 +41,7 @@
         "no-useless-concat": "off",
         "func-names": "off",
         "consistent-return": "off",
-        "no-underscore-dangle": "off"
+        "no-underscore-dangle": "off",
+        "no-shadow": "off"
     }
 }

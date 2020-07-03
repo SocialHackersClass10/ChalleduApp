@@ -65,7 +65,7 @@ const NGOSchema = mongoose.Schema({
         phone: [{ type: String, trim: true, required: true }],
         contact_hours: [{ type: String, trim: true }]
     },
-    documents: [Buffer]
+    documents: [{ type: String, trim: true }]
 });
 
 // keep schema and model in singular - also export the models
