@@ -1,14 +1,16 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const jwtMiddleware = require('express-jwt');
 const { User, NGO } = require('./Schema');
 
 const router = express.Router();
-const { isURL, ngoCheck, saltRounds } = require('./utils')
-const jwt = require('jsonwebtoken');
+const { isURL, ngoCheck, saltRounds } = require('./utils');
 require('dotenv/config');
 
+const validateRoles = require('./middleware/validateRoles');
 // endpoint: get all users
-router.get('/users', async(req, res) => {
+router.get('/users', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algorithms: ['HS256'] }), validateRoles(['user-ngo', 'user-independent', 'admin']), async (req, res) => {
     try {
         const users = await User.find({});
         res.status(200).json({ users });
@@ -20,7 +22,7 @@ router.get('/users', async(req, res) => {
 });
 
 // endpoint: get single user
-router.get('/users/:id', async(req, res) => {
+router.get('/users/:id', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algorithms: ['HS256'] }), validateRoles(['user-ngo', 'user-independent', 'admin']), async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
         if (user) {
@@ -37,7 +39,7 @@ router.get('/users/:id', async(req, res) => {
 });
 
 // endpoint: Update a user
-router.put('/users/:id', async(req, res) => {
+router.put('/users/:id', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algorithms: ['HS256'] }), validateRoles(['admin']), async (req, res) => {
     const user_id = req.params.id;
     const user_data = req.body;
     try {
@@ -51,7 +53,7 @@ router.put('/users/:id', async(req, res) => {
 });
 
 // endpoint: insert a user
-router.post('/users', require('./middleware/middleware'), async(req, res) => {
+router.post('/users', require('./middleware/middleware'), async (req, res) => {
     const newUser = new User(req.body);
     let newUserEmail = req.body.email;
     newUserEmail = await User.countDocuments({ email: newUserEmail });
@@ -78,7 +80,7 @@ router.post('/users', require('./middleware/middleware'), async(req, res) => {
 });
 
 // endpoint: insert an NGO
-router.post('/ngos', (req, res) => {
+router.post('/ngos', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algorithms: ['HS256'] }), validateRoles(['user-ngo', 'admin']), (req, res) => {
     // Validating the data posted to the database
     ngoCheck(req, res);
 
@@ -105,7 +107,7 @@ router.post('/ngos', (req, res) => {
 });
 
 // endpoint: get all ngos
-router.get('/ngos', async(req, res) => {
+router.get('/ngos', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algorithms: ['HS256'] }), validateRoles(['user-ngo', 'user-independent', 'admin']), async (req, res) => {
     try {
         const ngos = await NGO.find({ document_state: 'Approved' }, 'name image description affinities');
         res.status(200).json({ ngos });
@@ -117,7 +119,7 @@ router.get('/ngos', async(req, res) => {
 });
 
 // endpoint: Update an NGO
-router.put('/ngos/:id', async(req, res) => {
+router.put('/ngos/:id', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algorithms: ['HS256'] }), validateRoles(['admin']), async (req, res) => {
     const ngo_id = req.params.id;
     const ngo_data = req.body;
     try {
@@ -128,7 +130,8 @@ router.put('/ngos/:id', async(req, res) => {
     }
 });
 
-router.get('/ngos/:id', async(req, res) => {
+// Get single ngo
+router.get('/ngos/:id', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algorithms: ['HS256'] }), validateRoles(['user-ngo', 'user-independent', 'admin']), async (req, res) => {
     try {
         const ngo = await NGO.findById(req.params.id);
         if (ngo) {
@@ -141,36 +144,28 @@ router.get('/ngos/:id', async(req, res) => {
     }
 });
 
-//route for login
-router.post('/auth/login', async (req,res) => {
-    const email = req.body.email;
-    const password = await bcrypt.hash(req.body.password, saltRounds);
-    const user = await User.find({document_state:'Approved', email: email, password: password});
-    if (user) {
-        res.status(200).json(createJWTs(user._id, user.role));
+
+// route for login
+router.post('/auth/login', async(req, res) => {
+    const { email, password } = req.body;
+    const user = await User.find({ document_state: 'Approved', email });
+    if (user == null) return res.status(401).json({ error: 'You provided wrong set of credentials.' });
+    if (await bcrypt.compare(password, user[0].password)) {
+        res.status(200).json(createJWTs(user[0].id, user[0].role));
     } else {
-        res.status(401).json({ error: "You provided wrong set of credentials." });
-    };
+        res.status(401).json({ error: 'You provided wrong set of credentials.' });
+    }
 });
 
-
-function createJWTs(id, role){
-    const iat = new Date();
-    const exp = new Date();
-
-    let payload = {
-        id,
-        iat,
-        exp: exp.setDate(iat.getDate()+7) 
-    }
-
-    const refresh_token = jwt.sign(payload, process.env.REFRESH_TOKEN_KEY, { expiresIn: "168h" });
+function createJWTs(id, role) {
+    const payload = {
+        id
+    };
+    const refresh_token = jwt.sign(payload, process.env.REFRESH_TOKEN_KEY, { expiresIn: '168h' });
     payload.role = role;
-    payload.exp = exp.setDate(iat.getDate()+1);
-    const access_token = jwt.sign(payload, process.env.ACCESS_TOKEN_KEY, { expiresIn: "24h" });
+    const access_token = jwt.sign(payload, process.env.ACCESS_TOKEN_KEY, { expiresIn: '24h' });
 
-    return {access_token, refresh_token};
+    return { access_token, refresh_token };
 }
-
 
 module.exports = router;

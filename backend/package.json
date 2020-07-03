@@ -5,7 +5,7 @@
     "main": "index.js",
     "scripts": {
         "start": "nodemon ./src/index.js",
-        "lint": "eslint --fix src/*.js"
+        "lint": "eslint --fix src/**/*.js"
     },
     "husky": {
         "hooks": {
@@ -27,6 +27,7 @@
         "cors": "^2.8.5",
         "dotenv": "^8.2.0",
         "express": "^4.17.1",
+        "express-jwt": "^6.0.0",
         "formidable": "^1.2.2",
         "jsonwebtoken": "^8.5.1",
         "mongoose": "^5.9.18",

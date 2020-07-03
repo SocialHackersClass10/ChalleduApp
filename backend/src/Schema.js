@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 // mongodb: (may be) needed for targeted updates
 mongoose.set('useFindAndModify', false);
@@ -8,14 +8,14 @@ mongoose.set('useFindAndModify', false);
 module.exports.mongoose = mongoose;
 
 const affinitiesArray = [
-    "ΜΗΔΕΝΙΚΗ ΦΤΩΧΕΙΑ", "ΜΗΔΕΝΙΚΗ ΠΕΙΝΑ",
-    "ΚΑΛΗ ΥΓΕΙΑ ΚΑΙ ΕΥΗΜΕΡΙΑ", "ΠΟΙΟΤΙΚΗ ΕΚΠΑΙΔΕΥΣΗ",
-    "ΙΣΟΤΗΤΑ ΤΩΝ ΦΥΛΩΝ", "ΚΑΘΑΡΟ ΝΕΡΟ - ΑΠΟΧΕΤΕΥΣΗ",
-    "ΦΤΗΝΗ ΚΑΙ ΚΑΘΑΡΗ ΕΝΕΡΓΕΙΑ", "ΑΞΙΟΠΡΕΠΗΣ ΕΡΓΑΣΙΑ ΚΑΙ ΟΙΚΟΝΟΜΙΚΗ ΑΝΑΠΤΥΞΗ",
-    "ΒΙΟΜΗΧΑΝΙΑ, ΚΑΙΝΟΤΟΜΙΑ ΚΑΙ ΥΠΟΔΟΜΕΣ", "ΛΙΓΟΤΕΡΕΣ ΑΝΙΣΟΤΗΤΕΣ",
-    "ΒΙΩΣΙΜΕΣ ΠΟΛΕΙΣ ΚΑΙ ΚΟΙΝΟΤΗΤΕΣ", "ΥΠΕΥΘΥΝΗ ΚΑΤΑΝΑΛΩΣΗ ΚΑΙ ΠΑΡΑΓΩΓΗ",
-    "ΔΡΑΣΗ ΓΙΑ ΤΟ ΚΛΙΜΑ", "ΖΩΗ ΣΤΟ ΝΕΡΟ", "ΖΩΗ ΣΤΗ ΣΤΕΡΙΑ",
-    "ΕΙΡΗΝΗ, ΔΙΚΑΙΟΣΥΝΗ ΚΑΙ ΙΣΧΥΡΟΙ ΘΕΣΜΟΙ", "ΣΥΝΕΡΓΑΣΙΑ ΓΙΑ ΤΟΥΣ ΣΤΟΧΟΥΣ"
+    'ΜΗΔΕΝΙΚΗ ΦΤΩΧΕΙΑ', 'ΜΗΔΕΝΙΚΗ ΠΕΙΝΑ',
+    'ΚΑΛΗ ΥΓΕΙΑ ΚΑΙ ΕΥΗΜΕΡΙΑ', 'ΠΟΙΟΤΙΚΗ ΕΚΠΑΙΔΕΥΣΗ',
+    'ΙΣΟΤΗΤΑ ΤΩΝ ΦΥΛΩΝ', 'ΚΑΘΑΡΟ ΝΕΡΟ - ΑΠΟΧΕΤΕΥΣΗ',
+    'ΦΤΗΝΗ ΚΑΙ ΚΑΘΑΡΗ ΕΝΕΡΓΕΙΑ', 'ΑΞΙΟΠΡΕΠΗΣ ΕΡΓΑΣΙΑ ΚΑΙ ΟΙΚΟΝΟΜΙΚΗ ΑΝΑΠΤΥΞΗ',
+    'ΒΙΟΜΗΧΑΝΙΑ, ΚΑΙΝΟΤΟΜΙΑ ΚΑΙ ΥΠΟΔΟΜΕΣ', 'ΛΙΓΟΤΕΡΕΣ ΑΝΙΣΟΤΗΤΕΣ',
+    'ΒΙΩΣΙΜΕΣ ΠΟΛΕΙΣ ΚΑΙ ΚΟΙΝΟΤΗΤΕΣ', 'ΥΠΕΥΘΥΝΗ ΚΑΤΑΝΑΛΩΣΗ ΚΑΙ ΠΑΡΑΓΩΓΗ',
+    'ΔΡΑΣΗ ΓΙΑ ΤΟ ΚΛΙΜΑ', 'ΖΩΗ ΣΤΟ ΝΕΡΟ', 'ΖΩΗ ΣΤΗ ΣΤΕΡΙΑ',
+    'ΕΙΡΗΝΗ, ΔΙΚΑΙΟΣΥΝΗ ΚΑΙ ΙΣΧΥΡΟΙ ΘΕΣΜΟΙ', 'ΣΥΝΕΡΓΑΣΙΑ ΓΙΑ ΤΟΥΣ ΣΤΟΧΟΥΣ'
 ];
 
 // addition for issue#38-document-approval-schema-modification
@@ -32,13 +32,13 @@ const userSchema = mongoose.Schema({
     password: { type: String, required: true, trim: true },
     email: { type: String, required: true, trim: true },
     full_name: { type: String, required: true, trim: true },
-    role: { type: String, required: true, trim: true, enum: ['administrator', 'User'] },
+    role: { type: String, required: true, trim: true, enum: ['user-ngo', 'user-independent', 'admin'] },
     affiliated_ngo: { // data specific to the NGO this user is affiliated with
-        ID: { type: String, default: "" }, // equals NGO._id
+        ID: { type: String, default: '' }, // equals NGO._id
         name: { type: String, trim: true }, // NGO.name
     },
-    affinities: [{ type: String, enum: affinitiesArray }], //an array of affinities
-    title: { type: String, trim: true }, //user's professional title
+    affinities: [{ type: String, enum: affinitiesArray }], // an array of affinities
+    title: { type: String, trim: true }, // user's professional title
     gender: { type: { type: String, trim: true }, enum: ['female', 'male', 'other'] },
     image: { type: String, trim: true },
     webpage: { type: String, trim: true },
@@ -59,7 +59,7 @@ const NGOSchema = mongoose.Schema({
     webpage: { type: String, trim: true, required: true },
     description: { type: String, trim: true, required: true },
     main_representative: { type: String, trim: true, required: true },
-    affinities: [{ type: String, enum: affinitiesArray, required: true }], //an array of _id affinities
+    affinities: [{ type: String, enum: affinitiesArray, required: true }], // an array of _id affinities
     contact: {
         address: [{ type: String, trim: true, required: true }],
         phone: [{ type: String, trim: true, required: true }],

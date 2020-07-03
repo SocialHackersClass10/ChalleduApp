@@ -1,4 +1,4 @@
-const { User } = require("../Schema")
+const { User } = require('../Schema')
 
 module.exports = function(req, res, next) {
     const newUser = new User(req.body)
@@ -10,5 +10,4 @@ module.exports = function(req, res, next) {
         }
         next()
     })
-
 }
