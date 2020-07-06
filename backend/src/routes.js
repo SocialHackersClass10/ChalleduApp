@@ -93,6 +93,18 @@ router.post('/ngos', (req, res) => {
         contact: { address, phone, contact_hours }
     } = req.body;
 
+    if (main_representative) {
+        //  there was an assigned representative
+        //  so we need to validate it was same as the access_token.id
+        if (main_representative!==req.user.id){
+            res.status(403).json({ error:'You are not authorized to create an NGO with a different representative than yourself.'})
+        }
+    } else {
+        //  there was no representative assigned
+        //  so we need to assign it the id from the access_token
+        main_representative=req.user.id;
+    }
+        
     const ngo = new NGO({ document_state: 'Pending', name, image, webpage, description, main_representative, affinities, contact: { address, phone, contact_hours } });
 
     ngo.save((error, ngo) => {
