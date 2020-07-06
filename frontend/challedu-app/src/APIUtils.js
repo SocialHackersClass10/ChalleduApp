@@ -23,7 +23,7 @@ async function issueAJAXRequest(method, endpoint, body = {}, access_token = "") 
   if (Object.keys(body).length > 0) {
     params.headers = { 
       "Content-Type": "application/json; charset=utf-8", 
-      "access_token": access_token 
+      "Authorization": `Bearer ${access_token}` 
     };
     params.body = JSON.stringify(body);
   }
