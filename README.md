@@ -1,14 +1,48 @@
+
 # ChalleduApp
-This repository contains the Code of the project, ChalleduApp, as a result of the collaboration between SHA-students of Class 10 &amp; Challedu.com.
+This repository contains the Code of the ChalleduApp project, which is a result of collaboration between SHA-students of Class 10 &amp; Challedu.com.
+
+
+## About the Server
+The server is the back-end part of Challedu App.
+The server's folder is **backend**, which resides under the main project folder. To successfully run the server during development phase, you need to execute following steps :
+*   Open a terminal
+
+*   Navigate to the main project folder ( it should be named **ChalleduApp** and contain 2 subfolders named **backend** and **frontend** and also this file, named **README.md** )
+
+*   Ensure you are synchronized and have the latest merged changes by executing following commands :
+```
+        git checkout master
+        git pull
+```
+
+*   Navigate to the backend folder and ensure you have all required dependencies installed ( all required application modules ) by executing following commands :
+```
+        cd backend
+        npm i
+```
+
+*   The server requires the presence of the dotenv-file named **.env**. It should be present in this folder, but may be **hidden** under normal circumstances. Please verify its existence, and if missing, kindly replace it. The whole team has been provided with the latest contents of this file. More info on this file can be found in the paragraph: **About Server constants**
+
+*   Once all dependency installations are complete and the dotenv file existence has been verified, you can run the server by following command :
+```
+        node ./src/index
+```
+
+The server will log a greeting and either provide feedback in case of an error, or log **Server ready, listening on port XXXX** in case it was successfully initialized and is ready to serve.
+
+You can now leave that console in the background for the duration of the tests. To stop the server, bring that console window to the foreground and press CTRL+C. This will terminate server execution.
+
+
 
 ## About Server constants  ( dotenv )
-This file will contain any constants for our Back-end Server application
+This file will contain any constants for the Back-end Server application
 It is expected to reside inside the root folder of the back-end, for example:
 ```
 ./ChalleduApp/backend/
 ```
 
-The connectivity with the database through the settings of this file have been verified by various users on both Linux and Windows operating systems.
+Connectivity with the database through the settings of this file have been verified by various users on both Linux and Windows operating systems.
 If, for any reason there is a connectivity problem, the following online resource may proove helpful: [Node dotenv is not working](http://stackoverflow.com/questions/26973484/ddg#43973629)
 
 
@@ -20,13 +54,13 @@ The file contains following definitions:
 
 
 #### About constant SERVER_PORT:
-This is the port our server will be listening to, when deployed. The final setting will be decided (most probably) by the client.
+This is the port our server will be listening to, when deployed. The final setting will be decided (most probably) by the client's admin team.
 
 #### About constant MONGODB_KEY:
-This defines the URL & the credentials & datanase name for the mongodb connection.
-For the time being, we have it pointing to a Private Cluster on Atlas.
+This defines the URL & the credentials & database name for the mongodb connection.
+For the time being, it is pointing to a Private Cluster on Atlas.
 It was suggested and decided to keep a common datastore for this step of the development cycle, so we could all have access to the same data.
-The Team has been provided with a ".env" file, which contains all the necessary information to connect to that database.
+The Team has been provided with a ".env" file, which contains all the necessary information to connect to said database.
 
 #### About JWT KEYS constants
 These keys are used to encrypt server-issued authorization tokens.
