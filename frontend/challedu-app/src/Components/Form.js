@@ -48,7 +48,10 @@ const Form = () => {
         let payload = JSON.parse(atob(loginResult.access_token.split(".")[1]));
 
         // fetch and save the user
-        user.loginUser(await UserProvider.getUser(payload.id, loginResult.access_token));
+        const userData = await UserProvider.getUser(payload.id, loginResult.access_token);
+        if (userData.error) {throw userData.error};
+
+        user.loginUser(userData);
 
     } catch(anError) {
         console.log('Login Error:',anError);
