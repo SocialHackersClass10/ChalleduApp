@@ -2,17 +2,17 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const jwtMiddleware = require('express-jwt');
-const fs = require('fs');
-const grid = require('gridfs-stream');
-const busboyBodyParser = require('busboy-body-parser');
+const formidable = require('formidable');
+const gridfs = require('mongoose-gridfs');
+const { createReadStream } = require('fs');
 const path = require('path');
+const { createModel } = require('mongoose-gridfs');
 const { User, NGO, mongoose } = require('./Schema');
 
 const router = express.Router();
 const { isURL, ngoCheck, saltRounds } = require('./utils');
 require('dotenv/config');
 
-router.use(busboyBodyParser({ multi: true }));
 const validateRoles = require('./middleware/validateRoles');
 // endpoint: get all users
 router.get('/users', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algorithms: ['HS256'] }), validateRoles(['user-ngo', 'user-independent', 'admin']), async(req, res) => {
@@ -95,12 +95,23 @@ router.post('/ngos', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algor
         image,
         webpage,
         description,
-        mainRepresentative,
+        main_representative,
         affinities,
-        contact: { address, phone, contactHours }
+        contact: { address, phone, contact_hours }
     } = req.body;
+    if (main_representative) {
+        //  there was an assigned representative
+        //  so we need to validate it was same as the access_token.id
+        if (main_representative !== req.user.id) {
+            res.status(403).json({ error: 'You are not authorized to create an NGO with a different representative than yourself.' });
+        }
+    } else {
+        //  there was no representative assigned
+        //  so we need to assign it the id from the access_token
+        main_representative = req.user.id;
+    }
 
-    const ngo = new NGO({ document_state: 'Pending', name, image, webpage, description, mainRepresentative, affinities, contact: { address, phone, contactHours } });
+    const ngo = new NGO({ document_state: 'Pending', name, image, webpage, description, main_representative, affinities, contact: { address, phone, contact_hours } });
 
     ngo.save((error, ngo) => {
         if (error) {
@@ -156,49 +167,54 @@ router.post('/ngos/:id/upload', jwtMiddleware({ secret: process.env.ACCESS_TOKEN
             error: 'Error during image/document upload.'
         });
     }
-    const fileInfos = req.files.file;
-    const prExt = /jpg|jpeg|png|gif|pdf/;
-    const checkExt = prExt.test(path.extname(fileInfos[0].name));
-    const checkmime = prExt.test(fileInfos[0].mimetype);
+    mongoose.connect(process.env.MONGODB_KEY, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true });
+    gridfs.mongo = mongoose.mongo;
+    const { connection } = mongoose;
+    connection.once('open', function() {
+        const upload = createModel({
+            modelName: 'upload',
+            connection
+        });
+        const form = formidable({ multiples: true });
 
-    if (checkExt && checkmime) {
-        mongoose.connect(process.env.MONGODB_KEY);
-        const { connection } = mongoose;
-        grid.mongo = mongoose.mongo;
-        connection.once('open', () => {
-            const gridfs = grid(connection.db);
+        form.parse(req, (err, fields, files) => {
+            if (err) {
+                res.status(400).json({ err: err.message });
+            }
+            const prExt = /jpg|jpeg|png|gif|pdf/;
+            const checkExt = prExt.test(path.extname(files.file.name));
+            const checkmime = prExt.test(files.file.type);
 
-            const writeStream = gridfs.createWriteStream({
-                filename: `file_${fileInfos[0].name}`,
-                mode: 'w',
-                content_type: fileInfos[0].mimetype
-            });
-            writeStream.on('close', async function(file) {
-                let docArray = await NGO.find({ _id: req.params.id });
-                docArray = docArray[0].documents;
-                docArray.push(file._id);
-                NGO.update({ _id: req.params.id }, { documents: docArray }, (err, id) => {
-                    if (!err) {
-                        return res.status(201).send({
-                            message: 'Success',
-                            file
-                        });
+            if (checkExt && checkmime) {
+                const readStream = createReadStream(files.file.path);
+                const options = ({ filename: files.file.name, contentType: 'multipart/form-data' });
+                upload.write(options, readStream, async(error, file) => {
+                    if (err) {
+                        res.status(400).json({ err: err.message });
                     }
-                    res.status(400).json({
-                        error: 'Error during image/document upload.'
+                    let docArray = await NGO.find({ _id: req.params.id });
+                    docArray = docArray[0].documents;
+                    docArray.push(file._id);
+                    NGO.updateOne({ _id: req.params.id }, { documents: docArray }, (err, id) => {
+                        if (!err) {
+                            return res.status(201).send({
+                                message: 'Success',
+                                file
+                            });
+                        }
+                        res.status(400).json({
+                            error: 'Error during image/document upload.'
+                        });
                     });
                 });
-            });
-            writeStream.write(fileInfos[0].data);
+            } else {
+                res.status(400).json({
+                    error: 'Only images or pdf documents.'
 
-            writeStream.end();
+                });
+            }
         });
-    } else {
-        res.status(400).json({
-            error: 'Only images or pdf documents.'
-
-        });
-    }
+    });
 });
 
 // route for login
@@ -217,11 +233,11 @@ function createJWTs(id, role) {
     const payload = {
         id
     };
-    const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_KEY, { expiresIn: '168h' });
+    const refresh_token = jwt.sign(payload, process.env.REFRESH_TOKEN_KEY, { expiresIn: '168h' });
     payload.role = role;
-    const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_KEY, { expiresIn: '24h' });
+    const access_token = jwt.sign(payload, process.env.ACCESS_TOKEN_KEY, { expiresIn: '24h' });
 
-    return { accessToken, refreshToken };
+    return { access_token, refresh_token };
 }
 
 module.exports = router;
