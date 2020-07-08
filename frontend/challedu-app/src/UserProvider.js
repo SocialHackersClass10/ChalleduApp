@@ -16,4 +16,7 @@ export default class UserProvider {
   static async deleteUser(id) {
     return await APIUtils.delete(`users/${id}`);
   }
+  static async loginUser(userData) {
+    return await APIUtils.post(`auth/login/`, userData);
+  }
 }
