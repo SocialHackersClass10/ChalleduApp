@@ -97,9 +97,9 @@ const Form = () => {
         </div>
         <div>
         <div id="welcome_buttons " style={buttonStyle}>
-          {/* <Link to = "/main"> */}
+          <Link to = "/main">
           <Button  color="success" bsStyle="primary" bsSize="large" block type="submit"> Log In </Button>
-          {/* </Link> */}
+          </Link>
         </div>
         </div>
       </form>
