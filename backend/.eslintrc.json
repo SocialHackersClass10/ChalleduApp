@@ -35,7 +35,7 @@
             "never"
         ],
         "no-console": "off",
-        "max-len": ["error", { "code": 80 }],
+        "max-len": "off",
         "no-unused-vars": "off",
         "tno-useless-return": "off",
         "no-use-before-define": "off",

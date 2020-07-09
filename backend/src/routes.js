@@ -169,6 +169,20 @@ router.post('/auth/login', async(req, res) => {
     }
 });
 
+
+//route for refresh process
+router.post('/auth/refresh', (req, res) => {
+    const refreshToken = req.body.refresh_token;
+    jwt.verify(refreshToken, process.env.REFRESH_TOKEN_KEY, async(err, user) => {
+        if (err) { res.status(401).json({ error: 'Refresh token expired. Please login with your credentials.' }) }
+        else {
+            user = await User.findById(user.id);
+            res.status(200).json(createJWTs(user.id, user.role))
+        }
+    })
+})
+
+
 function createJWTs(id, role) {
     const payload = {
         id
