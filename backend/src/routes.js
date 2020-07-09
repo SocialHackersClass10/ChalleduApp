@@ -167,53 +167,48 @@ router.post('/ngos/:id/upload', jwtMiddleware({ secret: process.env.ACCESS_TOKEN
             error: 'Error during image/document upload.'
         });
     }
-    mongoose.connect(process.env.MONGODB_KEY, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true });
     gridfs.mongo = mongoose.mongo;
-    const { connection } = mongoose;
-    connection.once('open', function() {
-        const upload = createModel({
-            modelName: 'upload',
-            connection
-        });
-        const form = formidable({ multiples: true });
+    const upload = createModel({
+        modelName: 'upload'
+    });
+    const form = formidable({ multiples: true });
 
-        form.parse(req, (err, fields, files) => {
-            if (err) {
-                res.status(400).json({ err: err.message });
-            }
-            const prExt = /jpg|jpeg|png|gif|pdf/;
-            const checkExt = prExt.test(path.extname(files.file.name));
-            const checkmime = prExt.test(files.file.type);
+    form.parse(req, (err, fields, files) => {
+        if (err) {
+            res.status(400).json({ err: err.message });
+        }
+        const prExt = /jpg|jpeg|png|gif|pdf/;
+        const checkExt = prExt.test(path.extname(files.file.name));
+        const checkmime = prExt.test(files.file.type);
 
-            if (checkExt && checkmime) {
-                const readStream = createReadStream(files.file.path);
-                const options = ({ filename: files.file.name, contentType: 'multipart/form-data' });
-                upload.write(options, readStream, async(error, file) => {
-                    if (err) {
-                        res.status(400).json({ err: err.message });
-                    }
-                    let docArray = await NGO.find({ _id: req.params.id });
-                    docArray = docArray[0].documents;
-                    docArray.push(file._id);
-                    NGO.updateOne({ _id: req.params.id }, { documents: docArray }, (err, id) => {
-                        if (!err) {
-                            return res.status(201).send({
-                                message: 'Success',
-                                file
-                            });
-                        }
-                        res.status(400).json({
-                            error: 'Error during image/document upload.'
+        if (checkExt && checkmime) {
+            const readStream = createReadStream(files.file.path);
+            const options = ({ filename: files.file.name, contentType: 'multipart/form-data' });
+            upload.write(options, readStream, async(error, file) => {
+                if (err) {
+                    res.status(400).json({ err: err.message });
+                }
+                let docArray = await NGO.find({ _id: req.params.id });
+                docArray = docArray[0].documents;
+                docArray.push(file._id);
+                NGO.updateOne({ _id: req.params.id }, { documents: docArray }, (err, id) => {
+                    if (!err) {
+                        return res.status(201).send({
+                            message: 'Success',
+                            file
                         });
+                    }
+                    res.status(400).json({
+                        error: 'Error during image/document upload.'
                     });
                 });
-            } else {
-                res.status(400).json({
-                    error: 'Only images or pdf documents.'
+            });
+        } else {
+            res.status(400).json({
+                error: 'Only images or pdf documents.'
 
-                });
-            }
-        });
+            });
+        }
     });
 });
 
