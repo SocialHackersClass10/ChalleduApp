@@ -37,13 +37,13 @@ const Form = () => {
     try {
         const loginResult = await UserProvider.loginUser(values);
         if (loginResult.error) {throw loginResult.error};
-
         // save the access & refresh token
         user.loginTokens({
             access_token: loginResult.access_token,
             refresh_token: loginResult.refresh_token
         });
-
+        localStorage.setItem('access_token', loginResult.access_token)
+        localStorage.setItem('refresh_token', loginResult.refresh_token)
         // seperate the payload from the access_token and decode it from base64
         let payload = JSON.parse(atob(loginResult.access_token.split(".")[1]));
 
@@ -97,9 +97,9 @@ const Form = () => {
         </div>
         <div>
         <div id="welcome_buttons " style={buttonStyle}>
-          <Link to = "/main">
+          {/* <Link to = "/main"> */}
           <Button  color="success" bsStyle="primary" bsSize="large" block type="submit"> Log In </Button>
-          </Link>
+          {/* </Link> */}
         </div>
         </div>
       </form>
