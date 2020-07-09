@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import UserContext from "../userContext";
 import UserProvider from "../UserProvider";
-import {Link} from "react-router-dom"
+import { useHistory } from "react-router"
 import { Button } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../App.css';
@@ -12,6 +12,8 @@ const buttonStyle = { maxWidth: 200, margin: '20px  auto 10px ' };
 
 
 const Form = () => {
+  let history = useHistory()
+
   //whatever user types reseting the value
   const [values, setValues] = useState({ email: "", password: "" });
 
@@ -35,30 +37,33 @@ const Form = () => {
   //
   async function submit() {
     try {
-        const loginResult = await UserProvider.loginUser(values);
-        if (loginResult.error) {throw loginResult.error};
+      const loginResult = await UserProvider.loginUser(values);
+      if (loginResult.error) {throw loginResult.error};
 
-        // save the access & refresh token
-        user.loginTokens({
-            access_token: loginResult.access_token,
-            refresh_token: loginResult.refresh_token
-        });
+      // save the access & refresh token
+      user.loginTokens({
+          access_token: loginResult.access_token,
+          refresh_token: loginResult.refresh_token
+      });
 
-        // seperate the payload from the access_token and decode it from base64
-        let payload = JSON.parse(atob(loginResult.access_token.split(".")[1]));
+      // seperate the payload from the access_token and decode it from base64
+      let payload = JSON.parse(atob(loginResult.access_token.split(".")[1]));
 
-        // fetch and save the user
-        const userData = await UserProvider.getUser(payload.id, loginResult.access_token);
-        if (userData.error) {throw userData.error};
+      // fetch and save the user
+      const userData = await UserProvider.getUser(payload.id, loginResult.access_token);
+      if (userData.error) {throw userData.error};
 
-        user.loginUser(userData);
+      user.loginUser(userData);
+
+      //redirect to route: /main
+      history.push("/main")
 
     } catch(anError) {
-        console.log('Login Error:',anError);
+      console.log('Login Error:',anError);
 
-        // TODO:
-        // include here additional desired login-error handling
-        // which should be decided by the front-end team
+      // TODO:
+      // include here additional desired login-error handling
+      // which should be decided by the front-end team
 
     };
   }
@@ -97,9 +102,7 @@ const Form = () => {
         </div>
         <div>
         <div id="welcome_buttons " style={buttonStyle}>
-          <Link to = "/main">
           <Button  color="success" bsStyle="primary" bsSize="large" block type="submit"> Log In </Button>
-          </Link>
         </div>
         </div>
       </form>

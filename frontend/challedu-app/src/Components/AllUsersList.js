@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import UserProvider from "../UserProvider";
+import UserContext from "../userContext";
 
 function AllUsersList() {
   const [users, setUsers] = useState([]);
   const [load, setLoad] = useState(false);
-  useEffect(() => {
-    UserProvider.getUsers()
+  const user = useContext(UserContext);
 
+  useEffect(() => {
+    UserProvider.getUsers(user.tokens.access_token)
       .then((data) => {
         setUsers(data.users);
         setLoad(true);
-        console.log(data.users);
       }).catch(err => {
         console.log(err);
         setLoad(true);
