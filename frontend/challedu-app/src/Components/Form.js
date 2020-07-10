@@ -37,6 +37,7 @@ const Form = () => {
   //
   async function submit() {
     try {
+<<<<<<< HEAD
       const loginResult = await UserProvider.loginUser(values);
       if (loginResult.error) {throw loginResult.error};
 
@@ -52,6 +53,19 @@ const Form = () => {
       // fetch and save the user
       const userData = await UserProvider.getUser(payload.id, loginResult.access_token);
       if (userData.error) {throw userData.error};
+=======
+        const loginResult = await UserProvider.loginUser(values);
+        if (loginResult.error) {throw loginResult.error};
+        // save the access & refresh token
+        user.loginTokens({
+            access_token: loginResult.access_token,
+            refresh_token: loginResult.refresh_token
+        });
+        localStorage.setItem('access_token', loginResult.access_token)
+        localStorage.setItem('refresh_token', loginResult.refresh_token)
+        // seperate the payload from the access_token and decode it from base64
+        let payload = JSON.parse(atob(loginResult.access_token.split(".")[1]));
+>>>>>>> master
 
       user.loginUser(userData);
 
