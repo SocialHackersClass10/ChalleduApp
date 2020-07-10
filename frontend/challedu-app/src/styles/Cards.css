@@ -1,0 +1,16 @@
+/* styles for ngos and users profiles lists */
+.profiles-list.row{
+    width: 98%;
+    margin: auto;
+  }
+  
+  .profiles-list.row div{
+    text-decoration: none;
+    color: #000000;
+    opacity: 0.9;
+    transition: transform 0.2s;
+  }
+  
+  .profiles-list.row div:hover{
+    transform: scale(1.02);
+  }

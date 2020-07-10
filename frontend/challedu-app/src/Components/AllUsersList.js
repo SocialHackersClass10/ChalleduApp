@@ -10,6 +10,7 @@ function AllUsersList() {
   useEffect(() => {
     UserProvider.getUsers(user.tokens.access_token)
       .then((data) => {
+        console.log(data);
         setUsers(data.users);
         setLoad(true);
       }).catch(err => {
