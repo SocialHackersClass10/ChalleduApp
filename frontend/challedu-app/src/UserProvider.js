@@ -1,8 +1,8 @@
 import APIUtils from "./APIUtils";
 
 export default class UserProvider {
-  static async getUsers() {
-    return await APIUtils.get("users/");
+  static async getUsers(access_token) {
+    return await APIUtils.get("users/", access_token);
   }
   static async getUser(id, access_token) {
     return await APIUtils.get(`users/${id}`, access_token);
