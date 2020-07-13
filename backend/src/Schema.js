@@ -27,7 +27,7 @@ const userSchema = mongoose.Schema({
     // addition for issue#38-document-approval-schema-modification
     // here: substitute former field with new
     //  approval_pending: Boolean,
-    document_state: [{ type: String, enum: documentStates }],
+    document_state: { type: String, enum: documentStates },
     username: { type: String, trim: true },
     password: { type: String, required: true, trim: true },
     email: { type: String, required: true, trim: true },
@@ -53,13 +53,13 @@ const userSchema = mongoose.Schema({
 
 // keep schema and model in singular
 const NGOSchema = mongoose.Schema({
-    document_state: [{ type: String, enum: documentStates }],
+    document_state: { type: String, enum: documentStates },
     name: { type: String, trim: true, required: true },
     image: { type: String, trim: true },
     webpage: { type: String, trim: true, required: true },
     description: { type: String, trim: true, required: true },
     main_representative: { type: String, trim: true, required: true },
-    affinities: [{ type: String, enum: affinitiesArray, required: true }], // an array of _id affinities
+    affinities: [{ type: String, enum: affinitiesArray, required: true }], // an array of affinities
     contact: {
         address: [{ type: String, trim: true, required: true }],
         phone: [{ type: String, trim: true, required: true }],
