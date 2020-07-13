@@ -22,10 +22,6 @@
             "error",
             "single"
         ],
-        "semi": [
-            "error",
-            "never"
-        ],
         "space-before-function-paren": [
             "error",
             "never"
@@ -34,6 +30,7 @@
             "error",
             "never"
         ],
+        "camelcase": "off",
         "no-console": "off",
         "max-len": "off",
         "no-unused-vars": "off",
@@ -46,9 +43,8 @@
         "func-names": "off",
         "consistent-return": "off",
         "no-underscore-dangle": "off",
-        "camelcase":"off",
-        "no-shadow": "off",
         "no-const-assign":"off",
         "no-param-reassign":"off"
+        "no-shadow": "off"
     }
 }

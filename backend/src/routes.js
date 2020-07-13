@@ -1,18 +1,20 @@
-const express = require('express')
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
-const jwtMiddleware = require('express-jwt')
-const formidable = require('formidable')
-const gridfs = require('mongoose-gridfs')
-const { createReadStream } = require('fs')
-const path = require('path')
-const { createModel } = require('mongoose-gridfs')
-const { User, NGO, mongoose } = require('./Schema')
+const express = require('express');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const jwtMiddleware = require('express-jwt');
+const formidable = require('formidable');
+const gridfs = require('mongoose-gridfs');
+const { createReadStream } = require('fs');
+const path = require('path');
+const { createModel } = require('mongoose-gridfs');
+const { User, NGO, mongoose } = require('./Schema');
 
-const router = express.Router()
-const { isURL, ngoCheck, saltRounds } = require('./utils')
-require('dotenv/config')
-const validateRoles = require('./middleware/validateRoles')
+const router = express.Router();
+const { isURL, ngoCheck, saltRounds } = require('./utils');
+require('dotenv/config');
+
+const validateRoles = require('./middleware/validateRoles');
+
 // endpoint: get all users
 router.get('/users', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algorithms: ['HS256'] }), validateRoles(['user-ngo', 'user-independent', 'admin']), async(req, res) => {
     try {
@@ -42,11 +44,11 @@ router.get('/users/:id', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, a
 })
 // endpoint: Update a user
 router.put('/users/:id', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algorithms: ['HS256'] }), validateRoles(['admin']), async(req, res) => {
-    const user_id = req.params.id
-    const user_data = req.body
+    const userId = req.params.id;
+    const userData = req.body;
     try {
-        await User.findByIdAndUpdate(user_id, { $set: user_data })
-        res.status(200).json({ _id: user_id })
+        await User.findByIdAndUpdate(userId, { $set: userData })
+        res.status(200).json({ _id: userId });
     } catch (err) {
         // change: return only the .message instead of the complete error structure
         // res.status(404).send({ error: err });
@@ -152,6 +154,7 @@ router.post('/ngos', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algor
         main_representative = req.user.id
     }
     const ngo = new NGO({ document_state: 'Pending', name, image, webpage, description, main_representative, affinities, contact: { address, phone, contact_hours } })
+
     ngo.save((error, ngo) => {
         if (error) {
             // change: return only the .message instead of the complete error structure
@@ -173,11 +176,11 @@ router.get('/ngos', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algori
 })
 // endpoint: Update an NGO
 router.put('/ngos/:id', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algorithms: ['HS256'] }), validateRoles(['admin']), async(req, res) => {
-    const ngo_id = req.params.id
-    const ngo_data = req.body
+    const ngoId = req.params.id
+    const ngoData = req.body
     try {
-        await NGO.findByIdAndUpdate(ngo_id, { $set: ngo_data })
-        res.status(200).json({ _id: ngo_id })
+        await NGO.findByIdAndUpdate(ngoId, { $set: ngoData })
+        res.status(200).json({ _id: ngoId })
     } catch (err) {
         res.status(404).send({ error: err.message })
     }
@@ -195,6 +198,59 @@ router.get('/ngos/:id', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, al
         res.status(500).send({ error: err.message })
     }
 })
+
+router.post('/ngos/:id/upload', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algorithms: ['HS256'] }), validateRoles(['user-ngo', 'user-independent', 'admin']), async(req, res) => {
+    const checkId = await User.findById(req.user.id)
+    if (!(checkId.affiliated_ngo.ID === req.params.id)) {
+        res.status(403).json({
+            error: 'Error during image/document upload.'
+        })
+    }
+    gridfs.mongo = mongoose.mongo;
+    const upload = createModel({
+        modelName: 'upload'
+    })
+    const form = formidable({ multiples: true })
+
+    form.parse(req, (err, fields, files) => {
+        if (err) {
+            res.status(400).json({ err: err.message })
+        }
+        const prExt = /jpg|jpeg|png|gif|pdf/
+        const checkExt = prExt.test(path.extname(files.file.name))
+        const checkmime = prExt.test(files.file.type)
+
+        if (checkExt && checkmime) {
+            const readStream = createReadStream(files.file.path)
+            const options = ({ filename: files.file.name, contentType: 'multipart/form-data' })
+            upload.write(options, readStream, async(error, file) => {
+                if (err) {
+                    res.status(400).json({ err: err.message })
+                }
+                let docArray = await NGO.find({ _id: req.params.id })
+                docArray = docArray[0].documents
+                docArray.push(file._id)
+                NGO.updateOne({ _id: req.params.id }, { documents: docArray }, (err, id) => {
+                    if (!err) {
+                        return res.status(201).send({
+                            message: 'Success',
+                            file
+                        })
+                    }
+                    res.status(400).json({
+                        error: 'Error during image/document upload.'
+                    })
+                })
+            })
+        } else {
+            res.status(400).json({
+                error: 'Only images or pdf documents.'
+
+            })
+        }
+    })
+})
+
 // route for login
 router.post('/auth/login', async(req, res) => {
     const { email, password } = req.body
