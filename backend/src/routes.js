@@ -14,81 +14,124 @@ const { isURL, ngoCheck, saltRounds } = require('./utils');
 require('dotenv/config');
 
 const validateRoles = require('./middleware/validateRoles');
+
 // endpoint: get all users
 router.get('/users', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algorithms: ['HS256'] }), validateRoles(['user-ngo', 'user-independent', 'admin']), async(req, res) => {
     try {
-        const users = await User.find({});
-        res.status(200).json({ users });
+        const users = await User.find({})
+        res.status(200).json({ users })
     } catch (err) {
         // change: return only the .message instead of the complete error structure
         // res.status(500).send({ error: err })
-        res.status(500).send({ error: err.message });
+        res.status(500).send({ error: err.message })
     }
-});
-
+})
 // endpoint: get single user
 router.get('/users/:id', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algorithms: ['HS256'] }), validateRoles(['user-ngo', 'user-independent', 'admin']), async(req, res) => {
     try {
-        const user = await User.findById(req.params.id);
+        const user = await User.findById(req.params.id)
         if (user) {
-            delete user.password;
-            res.status(200).json({ user });
+            delete user.password
+            res.status(200).json({ user })
         } else {
-            res.status(404).send({ error: `User with id ${req.params.id} not found.` });
+            res.status(404).send({ error: `User with id ${req.params.id} not found.` })
         }
     } catch (err) {
         // change: return only the .message instead of the complete error structure
         // res.status(500).send({ error: err });
-        res.status(500).send({ error: err.message });
+        res.status(500).send({ error: err.message })
     }
-});
-
+})
 // endpoint: Update a user
 router.put('/users/:id', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algorithms: ['HS256'] }), validateRoles(['admin']), async(req, res) => {
     const userId = req.params.id;
     const userData = req.body;
     try {
-        await User.findByIdAndUpdate(userId, { $set: userData });
+        await User.findByIdAndUpdate(userId, { $set: userData })
         res.status(200).json({ _id: userId });
     } catch (err) {
         // change: return only the .message instead of the complete error structure
         // res.status(404).send({ error: err });
-        res.status(404).send({ error: err.message });
+        res.status(404).send({ error: err.message })
     }
-});
+})
 
 // endpoint: insert a user
 router.post('/users', require('./middleware/middleware'), async(req, res) => {
-    const newUser = new User(req.body);
-    let newUserEmail = req.body.email;
-    newUserEmail = await User.countDocuments({ email: newUserEmail });
+    const newUser = new User(req.body)
+    let newUserEmail = req.body.email
+    newUserEmail = await User.countDocuments({ email: newUserEmail })
     if (newUserEmail <= 0) {
         bcrypt.hash(newUser.password, saltRounds, function(err, hash) {
-            newUser.password = hash;
+            newUser.password = hash
             newUser.save((err, doc) => {
                 if (!err) {
-                    res.status(201).json({ user: doc });
+                    res.status(201).json({ user: doc })
                 } else {
                     res.status(400).json({
-
                         // change: unify returning error
                         // message: err.message
                         error: err.message
-
-                    });
+                    })
                 }
-            });
-        });
+            })
+        })
     } else {
-        res.status(400).json({ error: 'Could not create user. The email already exists.' });
+        res.status(400).json({ error: 'Could not create user. The email already exists.' })
     }
-});
+})
 
+router.post('/users/:id/upload', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algorithms: ['HS256'] }), validateRoles(['user-ngo', 'user-independent']), async(req, res) => {
+    // const checkId = await User.findById(req.user.id);
+    console.log(req.user.id)
+    console.log(req.params.id)
+    if (!(req.user.id === req.params.id)) {
+        res.status(403).json({
+            error: 'You are unauthorized to upload documents for this user.'
+        })
+    }
+    gridfs.mongo = mongoose.mongo
+    const upload = createModel({
+        modelName: 'upload'
+    })
+    const form = formidable({ multiples: true })
+    form.parse(req, (err, fields, files) => {
+        if (err) {
+            res.status(400).json({ err: err.message })
+        }
+        const prExt = /jpg|jpeg|png|gif/
+        const checkExt = prExt.test(path.extname(files.file.name))
+        const checkmime = prExt.test(files.file.type)
+        if (checkExt && checkmime) {
+            const readStream = createReadStream(files.file.path)
+            const options = ({ filename: files.file.name, contentType: 'multipart/form-data' })
+            upload.write(options, readStream, async(error, file) => {
+                if (err) {
+                    res.status(400).json({ err: err.message })
+                }
+                User.updateOne({ _id: req.params.id }, { image: file._id }, (err, id) => {
+                    if (!err) {
+                        return res.status(201).send({
+                            message: 'Success',
+                            file
+                        })
+                    }
+                    res.status(400).json({
+                        error: 'Error during image upload.'
+                    })
+                })
+            })
+        } else {
+            res.status(400).json({
+                error: 'Only /jpg|jpeg|png|gif/ file type are allowed.'
+            })
+        }
+    })
+})
 // endpoint: insert an NGO
 router.post('/ngos', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algorithms: ['HS256'] }), validateRoles(['user-ngo', 'admin']), (req, res) => {
     // Validating the data posted to the database
-    ngoCheck(req, res);
-
+    ngoCheck(req, res)
     // req.body destructuring in order not to repeat ourselves with req.body.key etc.
     const {
         name,
@@ -98,155 +141,146 @@ router.post('/ngos', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algor
         main_representative,
         affinities,
         contact: { address, phone, contact_hours }
-    } = req.body;
+    } = req.body
     if (main_representative) {
         //  there was an assigned representative
         //  so we need to validate it was same as the access_token.id
         if (main_representative !== req.user.id) {
-            res.status(403).json({ error: 'You are not authorized to create an NGO with a different representative than yourself.' });
+            res.status(403).json({ error: 'You are not authorized to create an NGO with a different representative than yourself.' })
         }
     } else {
         //  there was no representative assigned
         //  so we need to assign it the id from the access_token
-        main_representative = req.user.id;
+        main_representative = req.user.id
     }
-
-    const ngo = new NGO({ document_state: 'Pending', name, image, webpage, description, main_representative, affinities, contact: { address, phone, contact_hours } });
+    const ngo = new NGO({ document_state: 'Pending', name, image, webpage, description, main_representative, affinities, contact: { address, phone, contact_hours } })
 
     ngo.save((error, ngo) => {
         if (error) {
             // change: return only the .message instead of the complete error structure
             // res.status(500).json({ error: error })
-            res.status(500).json({ error: error.message });
-        } else { res.status(201).json({ _id: ngo._id }); }
-    });
-});
-
+            res.status(500).json({ error: error.message })
+        } else { res.status(201).json({ _id: ngo._id }) }
+    })
+})
 // endpoint: get all ngos
 router.get('/ngos', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algorithms: ['HS256'] }), validateRoles(['user-ngo', 'user-independent', 'admin']), async(req, res) => {
     try {
-        const ngos = await NGO.find({ document_state: 'Approved' }, 'name image description affinities');
-        res.status(200).json({ ngos });
+        const ngos = await NGO.find({ document_state: 'Approved' }, 'name image description affinities')
+        res.status(200).json({ ngos })
     } catch (err) {
         // change: return only the .message instead of the complete error structure
         // res.status(500).send({ error: err });
-        res.status(500).send({ error: err.message });
+        res.status(500).send({ error: err.message })
     }
-});
-
+})
 // endpoint: Update an NGO
 router.put('/ngos/:id', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algorithms: ['HS256'] }), validateRoles(['admin']), async(req, res) => {
-    const ngoId = req.params.id;
-    const ngoData = req.body;
+    const ngoId = req.params.id
+    const ngoData = req.body
     try {
-        await NGO.findByIdAndUpdate(ngoId, { $set: ngoData });
-        res.status(200).json({ _id: ngoId });
+        await NGO.findByIdAndUpdate(ngoId, { $set: ngoData })
+        res.status(200).json({ _id: ngoId })
     } catch (err) {
-        res.status(404).send({ error: err.message });
+        res.status(404).send({ error: err.message })
     }
-});
-
+})
 // Get single ngo
 router.get('/ngos/:id', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algorithms: ['HS256'] }), validateRoles(['user-ngo', 'user-independent', 'admin']), async(req, res) => {
     try {
-        const ngo = await NGO.findById(req.params.id);
+        const ngo = await NGO.findById(req.params.id)
         if (ngo) {
-            res.status(200).json({ ngo });
+            res.status(200).json({ ngo })
         } else {
-            res.status(404).json({ error: `NGO with id ${req.params.id} not found.` });
+            res.status(404).json({ error: `NGO with id ${req.params.id} not found.` })
         }
     } catch (err) {
-        res.status(500).send({ error: err.message });
+        res.status(500).send({ error: err.message })
     }
-});
+})
 
 router.post('/ngos/:id/upload', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algorithms: ['HS256'] }), validateRoles(['user-ngo', 'user-independent', 'admin']), async(req, res) => {
-    const checkId = await User.findById(req.user.id);
+    const checkId = await User.findById(req.user.id)
     if (!(checkId.affiliated_ngo.ID === req.params.id)) {
         res.status(403).json({
             error: 'Error during image/document upload.'
-        });
+        })
     }
     gridfs.mongo = mongoose.mongo;
     const upload = createModel({
         modelName: 'upload'
-    });
-    const form = formidable({ multiples: true });
+    })
+    const form = formidable({ multiples: true })
 
     form.parse(req, (err, fields, files) => {
         if (err) {
-            res.status(400).json({ err: err.message });
+            res.status(400).json({ err: err.message })
         }
-        const prExt = /jpg|jpeg|png|gif|pdf/;
-        const checkExt = prExt.test(path.extname(files.file.name));
-        const checkmime = prExt.test(files.file.type);
+        const prExt = /jpg|jpeg|png|gif|pdf/
+        const checkExt = prExt.test(path.extname(files.file.name))
+        const checkmime = prExt.test(files.file.type)
 
         if (checkExt && checkmime) {
-            const readStream = createReadStream(files.file.path);
-            const options = ({ filename: files.file.name, contentType: 'multipart/form-data' });
+            const readStream = createReadStream(files.file.path)
+            const options = ({ filename: files.file.name, contentType: 'multipart/form-data' })
             upload.write(options, readStream, async(error, file) => {
                 if (err) {
-                    res.status(400).json({ err: err.message });
+                    res.status(400).json({ err: err.message })
                 }
-                let docArray = await NGO.find({ _id: req.params.id });
-                docArray = docArray[0].documents;
-                docArray.push(file._id);
+                let docArray = await NGO.find({ _id: req.params.id })
+                docArray = docArray[0].documents
+                docArray.push(file._id)
                 NGO.updateOne({ _id: req.params.id }, { documents: docArray }, (err, id) => {
                     if (!err) {
                         return res.status(201).send({
                             message: 'Success',
                             file
-                        });
+                        })
                     }
                     res.status(400).json({
                         error: 'Error during image/document upload.'
-                    });
-                });
-            });
+                    })
+                })
+            })
         } else {
             res.status(400).json({
                 error: 'Only images or pdf documents.'
 
-            });
-        }
-    });
-});
-
-// route for login
-router.post('/auth/login', async(req, res) => {
-    const { email, password } = req.body;
-    const user = await User.find({ document_state: 'Approved', email });
-    if (user == null) return res.status(401).json({ error: 'You provided wrong set of credentials.' });
-    if (await bcrypt.compare(password, user[0].password)) {
-        res.status(200).json(createJWTs(user[0].id, user[0].role));
-    } else {
-        res.status(401).json({ error: 'You provided wrong set of credentials.' });
-    }
-});
-
-
-//route for refresh process
-router.post('/auth/refresh', (req, res) => {
-    const refreshToken = req.body.refresh_token;
-    jwt.verify(refreshToken, process.env.REFRESH_TOKEN_KEY, async(err, user) => {
-        if (err) { res.status(401).json({ error: 'Refresh token expired. Please login with your credentials.' }) }
-        else {
-            user = await User.findById(user.id);
-            res.status(200).json(createJWTs(user.id, user.role))
+            })
         }
     })
 })
 
-
+// route for login
+router.post('/auth/login', async(req, res) => {
+    const { email, password } = req.body
+    console.log(req.body)
+    const user = await User.find({ document_state: 'Approved', email })
+    // console.log(user[0].password);
+    if (user == null) return res.status(401).json({ error: 'You provided wrong set of credentials.' })
+    if (await bcrypt.compare(password, user[0].password)) {
+        res.status(200).json(createJWTs(user[0].id, user[0].role))
+    } else {
+        res.status(401).json({ error: 'You provided wrong set of credentials.' })
+    }
+})
+// route for refresh process
+router.post('/auth/refresh', (req, res) => {
+    const refreshToken = req.body.refresh_token
+    jwt.verify(refreshToken, process.env.REFRESH_TOKEN_KEY, async(err, user) => {
+        if (err) { res.status(401).json({ error: 'Refresh token expired. Please login with your credentials.' }) } else {
+            user = await User.findById(user.id)
+            res.status(200).json(createJWTs(user.id, user.role))
+        }
+    })
+})
 function createJWTs(id, role) {
     const payload = {
         id
-    };
-    const refresh_token = jwt.sign(payload, process.env.REFRESH_TOKEN_KEY, { expiresIn: '168h' });
-    payload.role = role;
-    const access_token = jwt.sign(payload, process.env.ACCESS_TOKEN_KEY, { expiresIn: '24h' });
-
-    return { access_token, refresh_token };
+    }
+    const refresh_token = jwt.sign(payload, process.env.REFRESH_TOKEN_KEY, { expiresIn: '168h' })
+    payload.role = role
+    const access_token = jwt.sign(payload, process.env.ACCESS_TOKEN_KEY, { expiresIn: '24h' })
+    return { access_token, refresh_token }
 }
-
-module.exports = router;
+module.exports = router

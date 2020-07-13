@@ -43,7 +43,8 @@
         "func-names": "off",
         "consistent-return": "off",
         "no-underscore-dangle": "off",
-        "no-shadow": "off",
-        "no-const-assign": "off"
+        "no-const-assign":"off",
+        "no-param-reassign":"off",
+        "no-shadow": "off"
     }
 }
