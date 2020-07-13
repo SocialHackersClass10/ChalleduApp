@@ -1,17 +1,36 @@
-import React from "react"
+import React, { useState, useEffect, useContext } from "react";
+import UserContext from "../userContext";
+import NGOProvider from "../NGOProvider";
+import Card from "./Card";
+import '../styles/Cards.css'
 
-const Ngos = ()=>{
-    return(
-    <div>
-        <h1>Ngo profile list</h1>
-        <p>Approved user and NGO profiles will be available under the respective menu items in 
-            the platform called “Users” and “NGOs”. Clicking on one of these items will open a
-            new page with a list of the corresponding items with a visible Name and some further 
-            information in the case of users (associated NGO, role). Each item in these lists will
-            be clickable and will open the respective profile for viewing only.
-        </p>
-    </div>
-    )
-    
-}
+
+function Ngos() {
+    const [ngos, setNGOs] = useState([]);
+    const [load, setLoad] = useState(false);
+    const user = useContext(UserContext);
+
+    useEffect(() => {
+        NGOProvider.getNGOs(user.tokens.access_token)
+            .then((data) => {
+                console.log(data);
+                setNGOs(data.ngos);
+                setLoad(true);
+            }).catch(err => {
+                console.log(err);
+                setLoad(true);
+            })
+    }, []);
+
+    if (load) {
+        return (
+            <div className="profiles-list row">
+                { ngos.map((ngo, index) => <Card key={index} role="ngo" infos={ngo} />) }
+            </div>    
+        );    
+    } else {
+        return <div>Loading...</div>;
+    }    
+};
+
 export default Ngos;

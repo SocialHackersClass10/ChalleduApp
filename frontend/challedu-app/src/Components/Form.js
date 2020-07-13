@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import UserContext from "../userContext";
 import UserProvider from "../UserProvider";
-import {Link} from "react-router-dom"
+import { useHistory } from "react-router"
 import { Button } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../App.css';
@@ -12,13 +12,15 @@ const buttonStyle = { maxWidth: 200, margin: '20px  auto 10px ' };
 
 
 const Form = () => {
+  let history = useHistory()
+
   //whatever user types reseting the value
   const [values, setValues] = useState({ email: "", password: "" });
 
   const user = useContext(UserContext);
 
   const handleChange = event => {
-    const { name, value } = event.target; 
+    const { name, value } = event.target;
 
     setValues({
       ...values,
@@ -33,34 +35,39 @@ const Form = () => {
   };
 
   //
-  function submit() {
-    fetch("http://localhost:4321/auth/login", {
-      method: "post",
-      body: JSON.stringify(values),
-      headers: { "Content-Type": "application/json" }
-    })
-      .then(res => res.json())
-      .then(data => {
-        if (!data.error) {
-          //save the tokens
-          user.loginTokens({
-            access_token: data.access_token,
-            refresh_token: data.refresh_token
-          });
+  async function submit() {
+    try {
+      const loginResult = await UserProvider.loginUser(values);
+      if (loginResult.error) {throw loginResult.error};
 
-          //seperate the payload from the access_token and decode it from base64
-          let accessToken = data.access_token;
-          let payload = accessToken.split(".")[1];
-          payload = JSON.parse(atob(payload));
-          
-          //fetch and save the user
-          user.loginUser(UserProvider.getUser(payload.id, data.access_token));
-
-        } else {
-          // handle error: user doesn't exist....
-          console.log("User doesn't exist..");
-        }
+      // save the access & refresh token
+      user.loginTokens({
+          access_token: loginResult.access_token,
+          refresh_token: loginResult.refresh_token
       });
+      localStorage.setItem('access_token', loginResult.access_token)
+      localStorage.setItem('refresh_token', loginResult.refresh_token)
+      
+      // seperate the payload from the access_token and decode it from base64
+      let payload = JSON.parse(atob(loginResult.access_token.split(".")[1]));
+
+      // fetch and save the user
+      const userData = await UserProvider.getUser(payload.id, loginResult.access_token);
+      if (userData.error) {throw userData.error};
+
+      user.loginUser(userData);
+
+      //redirect to route: /main
+      history.push("/main")
+
+    } catch(anError) {
+      console.log('Login Error:',anError);
+
+      // TODO:
+      // include here additional desired login-error handling
+      // which should be decided by the front-end team
+
+    };
   }
 
   return (
@@ -69,7 +76,7 @@ const Form = () => {
       <div id="welcome_msg">
                 <h3>Registration</h3>
             </div>
-            
+
       <form onSubmit={handleSubmit}>
         <div>
           <label>Email</label>
@@ -97,9 +104,7 @@ const Form = () => {
         </div>
         <div>
         <div id="welcome_buttons " style={buttonStyle}>
-          <Link to = "/main">
           <Button  color="success" bsStyle="primary" bsSize="large" block type="submit"> Log In </Button>
-          </Link>
         </div>
         </div>
       </form>
