@@ -48,23 +48,20 @@ function AllUsersList() {
                 {
                   users.approval_pending ? (
                     <td key={users.approval_pending}>{users.approval_pending}pending</td>
-                  ) : <td>aprovved</td>
+                  ) : <td>aproved</td>
                 }
               </tr>
             ))}
           </tbody>
         </table>
-        
+
       </div>
-        )
+    )
   } else
     return (
       <div>Loading...</div>
     )
 
-
-  
 };
-
 
 export default AllUsersList;

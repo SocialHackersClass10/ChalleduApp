@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import UserContext from "./userContext";
-import {BrowserRouter as Router, Route} from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import { withRouter } from "react-router";
 import './App.css';
 
@@ -8,8 +8,8 @@ import './App.css';
 //Importing Components
 import Registration from "./Components/Registration";
 import ProfileForm from "./Components/ProfileForm";
-import welcome from "./Components/welcome";
-import Navbar from "./Components/navbar"
+import Welcome from "./Components/Welcome";
+import Navigation from "./Components/Navigation"
 import Form from "./Components/Form";
 import AllUsersList from "./Components/AllUsersList";
 import MainContent from "./Components/MainContent";
@@ -20,9 +20,9 @@ import Ngos from "./Components/Ngos"
 const Main = withRouter(({ location }) => {
   return (<div className="parent">
     {
-      location.pathname !== '/' && location.pathname !== '/login' && location.pathname !== '/register' && <Navbar />
+      location.pathname !== '/' && location.pathname !== '/login' && location.pathname !== '/register' && <Navigation />
     }
-    <Route exact path="/" component={welcome} />
+    <Route exact path="/" component={Welcome} />
     <Route path="/login" component={Form} />
     <Route path="/main" component={MainContent} />
     <Route path="/users" component={Users} />
@@ -30,7 +30,6 @@ const Main = withRouter(({ location }) => {
     <Route path="/usersList" component={AllUsersList} />
     <Route path="/register" component={Registration} />
     <Route path="/profileform" component={ProfileForm} />
-
   </div>)
 })
 
@@ -50,7 +49,7 @@ const App = () => {
     setUser({});
     setTokens({});
   }
-  
+
   return (
     <UserContext.Provider
       value={{
@@ -60,13 +59,13 @@ const App = () => {
         loginUser: loginUser,
         logout: logout
       }}>
-        
+
       <Router>
         <Main />
       </Router>
-      
+
     </UserContext.Provider>
-  );      
+  );
 };
 
 export default App;
