@@ -5,7 +5,7 @@ import Card from "./Card";
 import '../styles/Cards.css'
 
 
-function Ngos() {
+const Ngos = () => {
     const [ngos, setNGOs] = useState([]);
     const [load, setLoad] = useState(false);
     const user = useContext(UserContext);
@@ -25,12 +25,12 @@ function Ngos() {
     if (load) {
         return (
             <div className="profiles-list row">
-                { ngos.map((ngo, index) => <Card key={index} role="ngo" infos={ngo} />) }
-            </div>    
-        );    
+                {ngos.map((ngo, index) => <Card key={index} role="ngo" infos={ngo} />)}
+            </div>
+        );
     } else {
         return <div>Loading...</div>;
-    }    
+    }
 };
 
 export default Ngos;

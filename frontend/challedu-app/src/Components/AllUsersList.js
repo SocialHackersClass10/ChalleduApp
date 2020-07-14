@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import UserProvider from "../UserProvider";
 import UserContext from "../userContext";
 
-function AllUsersList() {
+const AllUsersList = () => {
   const [users, setUsers] = useState([]);
   const [load, setLoad] = useState(false);
   const user = useContext(UserContext);
@@ -17,7 +17,6 @@ function AllUsersList() {
         console.log(err);
         setLoad(true);
       })
-
   }, []);
 
   if (load) {

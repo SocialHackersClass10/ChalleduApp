@@ -38,30 +38,30 @@ const Form = () => {
   async function submit() {
     try {
       const loginResult = await UserProvider.loginUser(values);
-      if (loginResult.error) {throw loginResult.error};
+      if (loginResult.error) { throw loginResult.error };
 
       // save the access & refresh token
       user.loginTokens({
-          access_token: loginResult.access_token,
-          refresh_token: loginResult.refresh_token
+        access_token: loginResult.access_token,
+        refresh_token: loginResult.refresh_token
       });
       localStorage.setItem('access_token', loginResult.access_token)
       localStorage.setItem('refresh_token', loginResult.refresh_token)
-      
+
       // seperate the payload from the access_token and decode it from base64
       let payload = JSON.parse(atob(loginResult.access_token.split(".")[1]));
 
       // fetch and save the user
       const userData = await UserProvider.getUser(payload.id, loginResult.access_token);
-      if (userData.error) {throw userData.error};
+      if (userData.error) { throw userData.error };
 
       user.loginUser(userData);
 
       //redirect to route: /main
       history.push("/main")
 
-    } catch(anError) {
-      console.log('Login Error:',anError);
+    } catch (anError) {
+      console.log('Login Error:', anError);
 
       // TODO:
       // include here additional desired login-error handling
@@ -71,11 +71,11 @@ const Form = () => {
   }
 
   return (
-    <div className= "welcome">
+    <div className="welcome">
       <img id="logo" src={logo} alt="logo" />
       <div id="welcome_msg">
-                <h3>Registration</h3>
-            </div>
+        <h3>Registration</h3>
+      </div>
 
       <form onSubmit={handleSubmit}>
         <div>
@@ -103,9 +103,9 @@ const Form = () => {
           />
         </div>
         <div>
-        <div id="welcome_buttons " style={buttonStyle}>
-          <Button  color="success" bsStyle="primary" bsSize="large" block type="submit"> Log In </Button>
-        </div>
+          <div id="welcome_buttons " style={buttonStyle}>
+            <Button color="success" bsStyle="primary" bsSize="large" block type="submit"> Log In </Button>
+          </div>
         </div>
       </form>
     </div>
