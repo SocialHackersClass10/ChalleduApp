@@ -19,10 +19,14 @@ const validateRoles = require('./middleware/validateRoles');
 router.get('/users', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algorithms: ['HS256'] }), validateRoles(['user-ngo', 'user-independent', 'admin']), async(req, res) => {
     try {
         let users;
-        if (checkAdmin(req.headers.Authorization)) users = await User.find({});
-        else users = await User.find({ document_state: 'Approved' });
+        if (checkAdmin(req.headers.authorization)) {
+            users = await User.find({});
+        } else {
+            users = await User.find({ document_state: 'Approved' });
+        }
 
-        users = users.map((user) => delete user.password);
+        users.forEach((user) => delete user.password);
+
         res.status(200).json({ users });
     } catch (err) {
         // change: return only the .message instead of the complete error structure
@@ -34,7 +38,7 @@ router.get('/users', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algor
 router.get('/users/:id', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algorithms: ['HS256'] }), validateRoles(['user-ngo', 'user-independent', 'admin']), async(req, res) => {
     try {
         const user = await User.findById(req.params.id);
-        if ((user && checkAdmin(req.headers.Authorization)) || (user && user.document_state === 'Approved')) {
+        if ((user && checkAdmin(req.headers.authorization)) || (user && user.document_state === 'Approved')) {
             delete user.password;
             res.status(200).json({ user });
         } else {
@@ -171,9 +175,11 @@ router.post('/ngos', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algor
 router.get('/ngos', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algorithms: ['HS256'] }), validateRoles(['user-ngo', 'user-independent', 'admin']), async(req, res) => {
     try {
         let ngos;
-        if (checkAdmin(req.headers.Authorization)) ngos = await NGO.find({});
-        else ngos = await NGO.find({ document_state: 'Approved' });
-
+        if (checkAdmin(req.headers.authorization)) {
+            ngos = await NGO.find({});
+        } else {
+            ngos = await NGO.find({ document_state: 'Approved' });
+        }
         res.status(200).json({ ngos });
     } catch (err) {
         // change: return only the .message instead of the complete error structure
@@ -196,7 +202,7 @@ router.put('/ngos/:id', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, al
 router.get('/ngos/:id', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algorithms: ['HS256'] }), validateRoles(['user-ngo', 'user-independent', 'admin']), async(req, res) => {
     try {
         const ngo = await NGO.findById(req.params.id);
-        if ((ngo && checkAdmin(req.headers.Authorization)) || (ngo && ngo.document_state === 'Approved')) {
+        if ((ngo && checkAdmin(req.headers.authorization)) || (ngo && ngo.document_state === 'Approved')) {
             res.status(200).json({ ngo });
         } else {
             res.status(404).json({ error: `NGO with id ${req.params.id} not found.` });
@@ -294,7 +300,7 @@ function createJWTs(id, role) {
 // function to check if user is Admin or not
 function checkAdmin(auth) {
     const accessToken = auth.split(' ')[1];
-    const payload = JSON.parse(atob(accessToken.split('.')[1]));
+    const payload = jwt.decode(accessToken);
 
     if (payload.role === 'admin') return true;
     return false;
