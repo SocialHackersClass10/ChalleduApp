@@ -19,7 +19,7 @@ const validateRoles = require('./middleware/validateRoles');
 router.get('/users', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algorithms: ['HS256'] }), validateRoles(['user-ngo', 'user-independent', 'admin']), async(req, res) => {
     try {
         let users;
-        if (checkAdmin(req.headers.Authorization)) users = await User.find({});
+        if (checkAdmin(req.headers.Authorization)) users = await User.find({})
         else users = await User.find({ document_state: 'Approved' });
 
         users = users.map((user) => delete user.password);
@@ -171,7 +171,7 @@ router.post('/ngos', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algor
 router.get('/ngos', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algorithms: ['HS256'] }), validateRoles(['user-ngo', 'user-independent', 'admin']), async(req, res) => {
     try {
         let ngos;
-        if (checkAdmin(req.headers.Authorization)) ngos = await NGO.find({});
+        if (checkAdmin(req.headers.Authorization)) ngos = await NGO.find({})
         else ngos = await NGO.find({ document_state: 'Approved' });
 
         res.status(200).json({ ngos });
