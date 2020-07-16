@@ -9,7 +9,7 @@ import './App.css';
 import Registration from "./Components/Registration";
 import ProfileForm from "./Components/ProfileForm";
 import welcome from "./Components/welcome";
-import Navbar from "./Components/navbar"
+import Navbar from "./Components/Navigation"
 import Form from "./Components/Form";
 import AllUsersList from "./Components/AllUsersList";
 import MainContent from "./Components/MainContent";

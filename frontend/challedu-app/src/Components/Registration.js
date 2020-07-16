@@ -6,7 +6,7 @@ import logo from '../images/logo.svg';
 import {Link} from "react-router-dom"
 
 
-const buttonStyle = { maxWidth: 200, margin: '20px  auto 10px ' };
+const buttonStyle = { maxWidth: 150, margin: '20px  auto 10px ' };
 
 const Registration = () => {
     const popUp = ()=>{
@@ -14,7 +14,7 @@ const Registration = () => {
     }
     return (
         <div className= "welcome">
-            <img id="logo" src={logo} alt="logo" />
+            <img className="img-responsive" id="logo" src={logo} alt="logo" />
             <div id="welcome_msg">
                 <h3>Registration</h3>
             </div>
