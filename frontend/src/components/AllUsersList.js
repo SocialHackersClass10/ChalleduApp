@@ -17,14 +17,15 @@ const AllUsersList = () => {
         console.log(err);
         setLoad(true);
       })
+//  eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (load) {
     return (
 
-      <div className="container col-8">
-        <table className="table table-striped table-bordered table-hover">
-
+     <div className="container ">
+       <div className="table-responsive">
+        <table className=" table table-striped table-bordered table-hover">
           <thead className="thead-dark ">
             <tr className="text text-center">
               <th>Id</th>
@@ -53,7 +54,7 @@ const AllUsersList = () => {
             ))}
           </tbody>
         </table>
-
+        </div>
       </div>
     )
   } else

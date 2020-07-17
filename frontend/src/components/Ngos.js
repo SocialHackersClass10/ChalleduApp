@@ -1,36 +1,37 @@
 import React, { useState, useEffect, useContext } from "react";
 import UserContext from "../userContext";
-import UserProvider from "../UserProvider";
+import NGOProvider from "../NGOProvider";
 import Card from "./Card";
 import '../styles/Cards.css'
 
 
-function Users() {
-    const [users, setUsers] = useState([]);
+const Ngos = () => {
+    const [ngos, setNGOs] = useState([]);
     const [load, setLoad] = useState(false);
     const user = useContext(UserContext);
 
     useEffect(() => {
-        UserProvider.getUsers(user.tokens.access_token)
+        NGOProvider.getNGOs(user.tokens.access_token)
             .then((data) => {
                 console.log(data);
-                setUsers(data.users);
+                setNGOs(data.ngos);
                 setLoad(true);
             }).catch(err => {
                 console.log(err);
                 setLoad(true);
             })
+//  eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     if (load) {
         return (
             <div className="profiles-list row">
-                { users.map((user, index) => <Card key={index} role="user" infos={user} />) }
-            </div>    
-        );    
+                {ngos.map((ngo, index) => <Card key={index} role="ngo" infos={ngo} />)}
+            </div>
+        );
     } else {
         return <div>Loading...</div>;
-    }    
+    }
 };
 
-export default Users;
+export default Ngos;

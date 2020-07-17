@@ -1,5 +1,5 @@
 
-#root{
+#root {
   position: absolute;
   top: 0;
   left: 0;
@@ -8,10 +8,10 @@
   background: url(../src/images/wallpaper.svg);
   background-repeat: repeat;
   background-size: cover;
-  font-family:'Segoe UI';
+  font-family:"Segoe UI";
 }
 
-.welcome{
+.welcome {
   text-align: center;
 }
 
@@ -21,27 +21,72 @@
   
 }
 
-#logo{
-  margin-top: 4%;
-  margin-bottom: 6%;
+#logo {
+  max-width: 600px;
 }
 
-#welcome_msg{
-  margin-bottom: 3%;
+#welcome_msg {
   font-size: 1.2rem;
 }
 
 
-#navlogo{
-  width: 10%;
-  margin-right: 45%;
-  margin-left: 3%;
+#navlogo {
+  width: 200px;
 }
-.parent{
+
+.parent {
   background: url(../src/images/wallpaper.svg);
   background-repeat: repeat-y;
   background-size: cover;
 }
 
+.welcome {
+  height: 100vh;
+}
 
+.navbar-toggler {
+  outline: none !important;
+}
 
+.navbar-collapse .navbar-nav .btn {
+  width: 100%;
+  padding: 10px 10px;
+}
+
+/* logo responsive  */
+@media screen and (max-width: 991px) {
+  .img-responsive {
+    width: 70%;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .img-responsive {
+    width: 80%;
+  }
+  #custom_button {
+    text-align: center;
+  }
+}
+
+@media screen and (max-width: 479px) {
+  .img-responsive {
+    width: 95%;
+  }
+  #custom_button .btn {
+    padding: 5px;
+  }
+}
+
+@media screen and (max-width: 313px) {
+  #navlogo {
+    width: 100px;
+  }
+  .btn .btn-primary .btn-block {
+    display: none;
+    width: 60%;
+  }
+  #custom_button .btn {
+    padding: 0px;
+  }
+}

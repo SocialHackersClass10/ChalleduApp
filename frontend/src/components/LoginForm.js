@@ -72,9 +72,9 @@ const Form = () => {
 
   return (
     <div className="welcome">
-      <img id="logo" src={logo} alt="logo" />
+       <img className="img-responsive" id="logo" src={logo} alt="logo" />
       <div id="welcome_msg">
-        <h3>Registration</h3>
+        <h3>Log In</h3>
       </div>
 
       <form onSubmit={handleSubmit}>
@@ -104,7 +104,7 @@ const Form = () => {
         </div>
         <div>
           <div id="welcome_buttons " style={buttonStyle}>
-            <Button color="success" bsStyle="primary" bsSize="large" block type="submit"> Log In </Button>
+            <Button color="success" bsstyle="primary" bsSize="large" block type="submit"> Log In </Button>
           </div>
         </div>
       </form>

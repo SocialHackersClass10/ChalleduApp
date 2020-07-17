@@ -6,15 +6,15 @@ import './App.css';
 
 
 //Importing Components
-import Registration from "./Components/Registration";
-import ProfileForm from "./Components/ProfileForm";
-import Welcome from "./Components/Welcome";
-import Navigation from "./Components/Navigation"
-import Form from "./Components/Form";
-import AllUsersList from "./Components/AllUsersList";
-import MainContent from "./Components/MainContent";
-import Users from "./Components/Users"
-import Ngos from "./Components/Ngos"
+import Registration from "./components/RegisterComponent";
+import ProfileForm from "./components/ProfileForm";
+import Welcome from "./components/Welcome";
+import Navigation from "./components/Navigation"
+import LoginForm from "./components/LoginForm";
+import AllUsersList from "./components/AllUsersList";
+import MainContent from "./components/MainContent";
+import Users from "./components/Users"
+import Ngos from "./components/Ngos"
 
 
 const Main = withRouter(({ location }) => {
@@ -23,7 +23,7 @@ const Main = withRouter(({ location }) => {
       location.pathname !== '/' && location.pathname !== '/login' && location.pathname !== '/register' && <Navigation />
     }
     <Route exact path="/" component={Welcome} />
-    <Route path="/login" component={Form} />
+    <Route path="/login" component={LoginForm} />
     <Route path="/main" component={MainContent} />
     <Route path="/users" component={Users} />
     <Route path="/ngos" component={Ngos} />
