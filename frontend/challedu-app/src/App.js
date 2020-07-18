@@ -6,15 +6,15 @@ import './App.css';
 
 
 //Importing Components
-import Registration from "./Components/Registration";
-import ProfileForm from "./Components/ProfileForm";
-import welcome from "./Components/welcome";
-import Navbar from "./Components/navbar"
-import Form from "./Components/Form";
-import AllUsersList from "./Components/AllUsersList";
-import MainContent from "./Components/MainContent";
-import Users from "./Components/Users"
-import Ngos from "./Components/Ngos"
+import Registration from "./components/RegisterComponent";
+import ProfileForm from "./components/ProfileForm";
+import welcome from "./components/welcome";
+import Navbar from "./components/navbar"
+import Form from "./components/Form";
+import AllUsersList from "./components/AllUsersList";
+import MainContent from "./components/MainContent";
+import Users from "./components/Users"
+import Ngos from "./components/Ngos"
 
 
 const Main = withRouter(({ location }) => {
