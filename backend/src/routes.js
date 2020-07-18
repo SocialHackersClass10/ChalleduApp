@@ -19,8 +19,8 @@ const validateRoles = require('./middleware/validateRoles');
 router.get('/users', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algorithms: ['HS256'] }), validateRoles(['user-ngo', 'user-independent', 'admin']), async(req, res) => {
     try {
         let users;
-        if (isAdmin(req.headers.authorization)) {
-            users = await User.find({});
+        if (req.user.role === 'admin') {
+            users = await User.find({}).select('-password');
         } else {
             users = await User.find({ document_state: 'Approved' }).select('-password');
         }
@@ -35,7 +35,7 @@ router.get('/users', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algor
 router.get('/users/:id', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algorithms: ['HS256'] }), validateRoles(['user-ngo', 'user-independent', 'admin']), async(req, res) => {
     try {
         const user = await User.findById(req.params.id).select('-password');
-        if ((user && isAdmin(req.headers.authorization)) || (user && user.document_state === 'Approved')) {
+        if ((user && req.user.role === 'admin') || (user && user.document_state === 'Approved')) {
             res.status(200).json({ user });
         } else {
             res.status(404).send({ error: `User with id ${req.params.id} not found.` });
@@ -172,7 +172,7 @@ router.post('/ngos', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algor
 router.get('/ngos', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algorithms: ['HS256'] }), validateRoles(['user-ngo', 'user-independent', 'admin']), async(req, res) => {
     try {
         let ngos;
-        if (isAdmin(req.headers.authorization)) {
+        if (req.user.role === 'admin') {
             ngos = await NGO.find({});
         } else {
             ngos = await NGO.find({ document_state: 'Approved' });
@@ -201,7 +201,7 @@ router.put('/ngos/:id', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, al
 router.get('/ngos/:id', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algorithms: ['HS256'] }), validateRoles(['user-ngo', 'user-independent', 'admin']), async(req, res) => {
     try {
         const ngo = await NGO.findById(req.params.id);
-        if ((ngo && isAdmin(req.headers.authorization)) || (ngo && ngo.document_state === 'Approved')) {
+        if ((ngo && req.user.role === 'admin') || (ngo && ngo.document_state === 'Approved')) {
             res.status(200).json({ ngo });
         } else {
             res.status(404).json({ error: `NGO with id ${req.params.id} not found.` });
@@ -294,15 +294,6 @@ function createJWTs(id, role) {
     payload.role = role;
     const access_token = jwt.sign(payload, process.env.ACCESS_TOKEN_KEY, { expiresIn: '24h' });
     return { access_token, refresh_token };
-}
-
-// function to check if user is Admin or not
-function isAdmin(auth) {
-    const accessToken = auth.split(' ')[1];
-    const payload = jwt.decode(accessToken);
-
-    if (payload.role === 'admin') return true;
-    return false;
 }
 
 module.exports = router;
