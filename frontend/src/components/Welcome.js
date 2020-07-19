@@ -19,10 +19,10 @@ export default class welcome extends Component {
                 </div>
                 <div id="welcome_buttons" style={buttonStyle}>
                     <Link to ="/login">
-                        <Button className="mb-2 "color="primary" bsStyle="primary" bsSize="large" block> Login </Button>
+                        <Button className="mb-2 "color="primary" bsstyle="primary" bssize="large" block> Login </Button>
                     </Link>
                     <Link to ="/register">
-                        <Button color="success" bsStyle="primary" bsSize="large" block> Register </Button>
+                        <Button color="success" bsstyle="primary" bssize="large" block> Register </Button>
                         </Link>
                 </div>
             </div>

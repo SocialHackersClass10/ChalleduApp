@@ -6,7 +6,7 @@ import './App.css';
 
 
 //Importing Components
-import Registration from "./components/RegisterComponent";
+import Registration from "./components/RegisterForm";
 import ProfileForm from "./components/ProfileForm";
 import Welcome from "./components/Welcome";
 import Navigation from "./components/Navigation"

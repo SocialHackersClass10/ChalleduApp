@@ -58,7 +58,6 @@ router.put('/users/:id', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, a
 
 // endpoint: insert a user
 router.post('/users', require('./middleware/middleware'), async(req, res) => {
-    console.log(req.body);
     const newUser = new User(req.body);
     let newUserEmail = req.body.email;
     newUserEmail = await User.countDocuments({ email: newUserEmail });
@@ -84,8 +83,7 @@ router.post('/users', require('./middleware/middleware'), async(req, res) => {
 
 router.post('/users/:id/upload', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algorithms: ['HS256'] }), validateRoles(['user-ngo', 'user-independent']), async(req, res) => {
     // const checkId = await User.findById(req.user.id);
-    console.log(req.user.id);
-    console.log(req.params.id);
+
     if (!(req.user.id === req.params.id)) {
         res.status(403).json({
             error: 'You are unauthorized to upload documents for this user.'

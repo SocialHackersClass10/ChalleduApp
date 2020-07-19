@@ -3,8 +3,8 @@ module.exports = function validateRoles(roles) {
         if (!roles.includes(req.user.role)) {
             res.status(403).json({
                 errror: 'You are unauthorized to access this resource.'
-            })
+            });
         }
-        next()
-    }
-}
+        next();
+    };
+};

@@ -104,7 +104,7 @@ const Form = () => {
         </div>
         <div>
           <div id="welcome_buttons " style={buttonStyle}>
-            <Button color="success" bsstyle="primary" bsSize="large" block type="submit"> Log In </Button>
+            <Button color="success" bsstyle="primary" bssize="large" block type="submit"> Log In </Button>
           </div>
         </div>
       </form>
