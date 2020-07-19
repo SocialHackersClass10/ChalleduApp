@@ -46,9 +46,9 @@ function AllUsersList() {
                 <td key={users.email}>{users.email}</td>
                 <td key={users.role}>{users.role}</td>
                 {
-                  users.approval_pending ? (
-                    <td key={users.approval_pending}>{users.approval_pending}pending</td>
-                  ) : <td>aprovved</td>
+                  users.document_state === "Approved" ? (
+                    <td key={users.document_state}>{users.document_state}</td>
+                  ) : <td>Pending</td>
                 }
               </tr>
             ))}
