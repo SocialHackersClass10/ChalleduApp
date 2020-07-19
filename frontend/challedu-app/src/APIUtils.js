@@ -19,6 +19,7 @@ export default class APIUtils {
 }
 
 async function issueAJAXRequest(method, endpoint, body = {}, access_token = "") {
+  console.log("acces"+access_token);
   const params = { method };
   params.headers = {
     "Authorization": `Bearer ${access_token}`

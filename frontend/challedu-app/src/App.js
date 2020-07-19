@@ -6,11 +6,11 @@ import './App.css';
 
 
 //Importing Components
-import Registration from "./components/RegisterComponent";
+import Registration from "./components/RegisterForm";
 import ProfileForm from "./components/ProfileForm";
 import welcome from "./components/welcome";
 import Navbar from "./components/navbar"
-import Form from "./components/Form";
+import Form from "./components/LoginForm";
 import AllUsersList from "./components/AllUsersList";
 import MainContent from "./components/MainContent";
 import Users from "./components/Users"
