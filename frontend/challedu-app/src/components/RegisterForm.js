@@ -39,15 +39,15 @@ export default class RegisterComponent extends Component {
     }
     handleSubmit(e) {
         e.preventDefault();
-    const { full_name, email, password, password2,role  } = this.state;
+    const { full_name, email, password, password2, role  } = this.state;
 
     if(password!==password2){
             alert('Ooppps ! Your password doesn`t match') 
-        }
+        }else{
         
    const userData = {full_name, email, password, role }; 
    UserProvider.createUser(userData);
-
+        }
     }
     render() {
       return(
