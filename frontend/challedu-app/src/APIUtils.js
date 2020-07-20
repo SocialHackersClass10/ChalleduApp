@@ -36,7 +36,6 @@ async function issueAJAXRequest(method, endpoint, body = {}, access_token = "") 
     console.log(errorMessage);
     throw new Error(errorMessage);
   } 
-  console.log(res.json());
   return await res.json();
 }
 
