@@ -15,7 +15,7 @@ export default class RegisterComponent extends Component {
             password2:'',
             role:'user-independent'
         }
-        this.full_name = this.email.bind(this);
+        this.full_name = this.full_name.bind(this);
         this.email = this.email.bind(this);
         this.password = this.password.bind(this);
         this.password2 = this.password2.bind(this);
