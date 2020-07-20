@@ -267,12 +267,32 @@ router.post('/ngos/:id/upload', jwtMiddleware({ secret: process.env.ACCESS_TOKEN
 router.post('/auth/login', async(req, res) => {
     const { email, password } = req.body;
     const user = await User.find({ document_state: 'Approved', email });
+
+    // vhanges for issue#103-fix-backend-login-endpoint
+    // here: comment out prev. code
+    /*
     if (user == null) return res.status(401).json({ error: 'You provided wrong set of credentials.' });
     if (await bcrypt.compare(password, user[0].password)) {
         res.status(200).json(createJWTs(user[0].id, user[0].role));
     } else {
         res.status(401).json({ error: 'You provided wrong set of credentials.' });
     }
+    */
+
+    // issue#103 code fixes
+    // here: define credentials-error message
+    const credentialsError = 'You provided a wrong set of credentials.';
+
+    // here: ensure existance of requested document
+    if (user.length<1) return res.status(401).json({ error: credentialsError });
+
+    // here: validate provided credentials
+    const credentialsValid = await bcrypt.compare(password, user[0].password);
+    if (!credentialsValid) return res.status(401).json({ error: credentialsError });
+
+    // here: validated, return success
+    res.status(200).json(createJWTs(user[0].id, user[0].role));
+
 });
 
 // route for refresh process
