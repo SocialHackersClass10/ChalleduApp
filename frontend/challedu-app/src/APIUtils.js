@@ -29,7 +29,6 @@ async function issueAJAXRequest(method, endpoint, body = {}, access_token = "") 
     params.headers["Content-Type"] = "application/json; charset=utf-8";
     params.body = JSON.stringify(body);
   }
-  console.log(API_URL + endpoint, params);
   const res = await fetch(API_URL + endpoint, params);
   if (!res.ok || res.status < 200 || res.status > 299) {
     const errorMessage = `HTTP ${res.status} - ${res.statusText}`;
