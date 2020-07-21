@@ -5,20 +5,28 @@ import UserContext from "../userContext";
 function AllUsersList() {
   const [users, setUsers] = useState([]);
   const [load, setLoad] = useState(false);
+  const [status, setStatus]=useState(['Pending', 'Approved', 'Rejected'])
   const user = useContext(UserContext);
 
-  useEffect(() => {
-    UserProvider.getUsers(user.tokens.access_token)
-      .then((data) => {
-        console.log(data);
-        setUsers(data.users);
-        setLoad(true);
-      }).catch(err => {
-        console.log(err);
-        setLoad(true);
-      })
+  const getUsers=()=>{
+      UserProvider.getUsers(user.tokens.access_token)
+        .then((data) => {
+          console.log(data);
+          setUsers(data.users);
+          setLoad(true);
+        }).catch(err => {
+          console.log(err);
+          setLoad(true);
+        })
+  }
 
-  }, []);
+  useEffect(getUsers, []);
+
+  const handleChange=async (e, id)=>{
+    const result = await UserProvider.updateUser(id, {document_state: e.target.value}, localStorage.getItem('access_token'))
+    getUsers()
+  }
+
 
   if (load) {
     return (
@@ -45,11 +53,12 @@ function AllUsersList() {
                 <td key={users.username}>{users.username}</td>
                 <td key={users.email}>{users.email}</td>
                 <td key={users.role}>{users.role}</td>
-                {
-                  users.approval_pending ? (
-                    <td key={users.approval_pending}>{users.approval_pending}pending</td>
-                  ) : <td>aprovved</td>
-                }
+                <td key={users.document_state}>
+                  <select className="form-control" value={users.document_state} onChange={event=>handleChange(event, users._id)}>
+                         {status.map(stat=><option>{stat}</option>).filter(state=>state!==users.document_state) }
+                  </select>
+                </td>
+                
               </tr>
             ))}
           </tbody>

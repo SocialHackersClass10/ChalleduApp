@@ -13,8 +13,8 @@ export default class APIUtils {
   static async post(url, content) {
     return await issueAJAXRequest("POST", url, content);
   }
-  static async put(url, content) {
-    return await issueAJAXRequest("PUT", url, content);
+  static async put(url, content, access_token) {
+    return await issueAJAXRequest("PUT", url, content, access_token);
   }
 }
 
