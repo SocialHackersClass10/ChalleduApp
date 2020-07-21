@@ -7,7 +7,7 @@ const gridfs = require('mongoose-gridfs');
 const { createReadStream } = require('fs');
 const path = require('path');
 const { createModel } = require('mongoose-gridfs');
-const { User, NGO, mongoose } = require('./Schema');
+const { User, NGO, documentStates, mongoose } = require('./Schema');
 
 const router = express.Router();
 const { isURL, ngoCheck, saltRounds } = require('./utils');
@@ -20,11 +20,10 @@ router.get('/users', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algor
     try {
         let users;
         if (req.user.role === 'admin') {
-            users = await User.find({}).select('-password');
+            users = await User.find({ document_state: getDocumentState(req.query.state) }).select('-password');
         } else {
             users = await User.find({ document_state: 'Approved' }).select('-password');
         }
-
         res.status(200).json({ users });
     } catch (err) {
         res.status(500).send({ error: err.message });
@@ -173,9 +172,9 @@ router.get('/ngos', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algori
     try {
         let ngos;
         if (req.user.role === 'admin') {
-            ngos = await NGO.find({});
+            ngos = await NGO.find({ document_state: getDocumentState(req.query.state) }, 'name image description affinities');
         } else {
-            ngos = await NGO.find({ document_state: 'Approved' });
+            ngos = await NGO.find({ document_state: 'Approved' }, 'name image description affinities');
         }
         res.status(200).json({ ngos });
     } catch (err) {
@@ -314,6 +313,12 @@ function createJWTs(id, role) {
     payload.role = role;
     const access_token = jwt.sign(payload, process.env.ACCESS_TOKEN_KEY, { expiresIn: '24h' });
     return { access_token, refresh_token };
+}
+
+//#52
+function getDocumentState(queryState) {
+    if (documentStates.includes(queryState)) return queryState;
+    return 'Approved';
 }
 
 module.exports = router;
