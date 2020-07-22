@@ -13,8 +13,8 @@ export default class UserProvider {
   static async getUser(id, accessToken) {
     return await APIUtils.get(`users/${id}`, accessToken);
   }
-  static async createUser(userData, accessToken) {
-    return await APIUtils.post("users/", userData, accessToken);
+  static async createUser(userData) {
+    return await APIUtils.post(`users/`, userData);
   }
   static async updateUser(id, userData, access_token) {
     return await APIUtils.put(`users/${id}`, userData, access_token);
