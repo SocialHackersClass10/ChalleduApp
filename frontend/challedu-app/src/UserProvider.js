@@ -8,13 +8,13 @@ export default class UserProvider {
     return await APIUtils.get(`users/${id}`, access_token);
   }
   static async createUser(userData) {
-    return await APIUtils.post("users/", userData);
+    return await APIUtils.post(`users/`, userData);
   }
   static async updateUser(id, userData, access_token) {
     return await APIUtils.put(`users/${id}`, userData, access_token);
   }
-  static async deleteUser(id) {
-    return await APIUtils.delete(`users/${id}`);
+  static async deleteUser(id, access_token) {
+    return await APIUtils.delete(`users/${id}`, access_token);
   }
   static async loginUser(userData) {
     return await APIUtils.post(`auth/login/`, userData);

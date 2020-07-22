@@ -27,12 +27,12 @@ function AllUsersList() {
     getUsers()
   }
 
-
   if (load) {
     return (
 
-      <div className="container col-8">
-        <table className="table table-striped table-bordered table-hover">
+      <div className="container ">
+        <div className="table-responsive">
+        <table className=" table table-striped table-bordered table-hover">
 
           <thead className="thead-dark ">
             <tr className="text text-center">
@@ -63,6 +63,7 @@ function AllUsersList() {
             ))}
           </tbody>
         </table>
+        </div>
         
       </div>
         )
@@ -70,7 +71,6 @@ function AllUsersList() {
     return (
       <div>Loading...</div>
     )
-
 
   
 };
