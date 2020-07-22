@@ -5,20 +5,20 @@ import './App.css';
 
 
 //Importing Components
-import Registration from "./Components/Registration";
-import ProfileForm from "./Components/ProfileForm";
-import welcome from "./Components/welcome";
-import Navbar from "./Components/Navigation"
-import Form from "./Components/Form";
-import AllUsersList from "./Components/AllUsersList";
-import MainContent from "./Components/MainContent";
-import Users from "./Components/Users"
-import Ngos from "./Components/Ngos"
-import RouteForAll from "./Components/RouteForAll";
-import RouteOnlyForAdmins from "./Components/RouteOnlyForAdmins";
-import NoPermision from "./Components/NoPermision";
-import PageNotFound from "./Components/PageNotFound";
-import RedirectToNotFound from "./Components/RedirectToNotFound";
+import LoginForm from "./components/LoginForm";
+import ProfileForm from "./components/ProfileForm";
+import welcome from "./components/welcome";
+import Navbar from "./components/Navigation"
+import RegisterForm from "./components/RegisterForm";
+import AllUsersList from "./components/AllUsersList";
+import MainContent from "./components/MainContent";
+import Users from "./components/Users"
+import Ngos from "./components/Ngos"
+import RouteForAll from "./components/RouteForAll";
+import RouteOnlyForAdmins from "./components/RouteOnlyForAdmins";
+import NoPermision from "./components/NoPermision";
+import PageNotFound from "./components/PageNotFound";
+import RedirectToNotFound from "./components/RedirectToNotFound";
 
 
 const Main = () => {
@@ -67,8 +67,8 @@ const App = () => {
           <Switch>
             <Route path ="/notfound" component={PageNotFound} />
             <Route exact path="/" component={welcome} />
-            <Route path="/login" component={Form} />
-            <Route path="/register" component={Registration} />
+            <Route path="/login" component={LoginForm} />
+            <Route path="/register" component={RegisterForm} />
             <RouteForAll path="/nopermision" component={NoPermision} />
             <Route component={Main} />
       </Switch>

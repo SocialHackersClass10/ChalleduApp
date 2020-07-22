@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import UserProvider from "../UserProvider";
-import { Button, Card, CardBody, Col, Container, 
+import { Button, Card, CardBody, Col, Container,
     Form, Input, InputGroup, Row } from 'reactstrap';
 import logo from '../images/logo.svg';
 import '../App.css';
 
-export default class RegisterComponent extends Component {
+export default class RegisterForm extends Component {
     constructor() {
         super()
         this.state = {
@@ -42,10 +42,10 @@ export default class RegisterComponent extends Component {
     const { full_name, email, password, password2, role  } = this.state;
 
     if(password!==password2){
-            alert('Ooppps ! Your password doesn`t match') 
+            alert('Ooppps ! Your password doesn`t match')
         }else{
-        
-   const userData = {full_name, email, password, role }; 
+
+   const userData = {full_name, email, password, role };
    UserProvider.createUser(userData);
         }
     }
