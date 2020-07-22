@@ -23,8 +23,9 @@ function AllUsersList() {
   if (load) {
     return (
 
-      <div className="container col-8">
-        <table className="table table-striped table-bordered table-hover">
+      <div className="container ">
+        <div className="table-responsive">
+        <table className=" table table-striped table-bordered table-hover">
 
           <thead className="thead-dark ">
             <tr className="text text-center">
@@ -46,14 +47,15 @@ function AllUsersList() {
                 <td key={users.email}>{users.email}</td>
                 <td key={users.role}>{users.role}</td>
                 {
-                  users.approval_pending ? (
-                    <td key={users.approval_pending}>{users.approval_pending}pending</td>
-                  ) : <td>aprovved</td>
+                  users.document_state === "Approved" ? (
+                    <td key={users.document_state}>{users.document_state}</td>
+                  ) : <td>Pending</td>
                 }
               </tr>
             ))}
           </tbody>
         </table>
+        </div>
         
       </div>
         )

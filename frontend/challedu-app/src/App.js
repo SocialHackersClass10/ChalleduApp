@@ -1,38 +1,40 @@
 import React, { useState } from "react";
 import UserContext from "./userContext";
-import {BrowserRouter as Router, Route} from "react-router-dom";
-import { withRouter } from "react-router";
+import {BrowserRouter as Router, Route , Switch} from "react-router-dom";
 import './App.css';
 
 
 //Importing Components
-import Registration from "./components/RegisterForm";
-import ProfileForm from "./components/ProfileForm";
-import welcome from "./components/welcome";
-import Navbar from "./components/navbar"
-import Form from "./components/LoginForm";
-import AllUsersList from "./components/AllUsersList";
-import MainContent from "./components/MainContent";
-import Users from "./components/Users"
-import Ngos from "./components/Ngos"
+import Registration from "./Components/Registration";
+import ProfileForm from "./Components/ProfileForm";
+import welcome from "./Components/welcome";
+import Navbar from "./Components/Navigation"
+import Form from "./Components/Form";
+import AllUsersList from "./Components/AllUsersList";
+import MainContent from "./Components/MainContent";
+import Users from "./Components/Users"
+import Ngos from "./Components/Ngos"
+import RouteForAll from "./Components/RouteForAll";
+import RouteOnlyForAdmins from "./Components/RouteOnlyForAdmins";
+import NoPermision from "./Components/NoPermision";
+import PageNotFound from "./Components/PageNotFound";
+import RedirectToNotFound from "./Components/RedirectToNotFound";
 
 
-const Main = withRouter(({ location }) => {
+const Main = () => {
   return (<div className="parent">
-    {
-      location.pathname !== '/' && location.pathname !== '/login' && location.pathname !== '/register' && <Navbar />
-    }
-    <Route exact path="/" component={welcome} />
-    <Route path="/login" component={Form} />
-    <Route path="/main" component={MainContent} />
-    <Route path="/users" component={Users} />
-    <Route path="/ngos" component={Ngos} />
-    <Route path="/usersList" component={AllUsersList} />
-    <Route path="/register" component={Registration} />
-    <Route path="/profileform" component={ProfileForm} />
-
+            <Navbar />
+              <Switch>
+                <RouteForAll exact path="/main" component={MainContent} />
+                <RouteForAll path="/users" component={Users} />
+                <RouteForAll path="/user/:id" component={PageNotFound} /> {/*change here with the component of profile for each user  */}
+                <RouteForAll path="/ngos" component={Ngos} />
+                <RouteOnlyForAdmins path="/usersList" component={AllUsersList} />
+                <RouteForAll path="/profileform" component={ProfileForm} />
+                <Route component={RedirectToNotFound} />
+              </Switch>
   </div>)
-})
+}
 
 const App = () => {
   const [user, setUser] = useState({});
@@ -50,7 +52,7 @@ const App = () => {
     setUser({});
     setTokens({});
   }
-  
+
   return (
     <UserContext.Provider
       value={{
@@ -60,13 +62,21 @@ const App = () => {
         loginUser: loginUser,
         logout: logout
       }}>
-        
+        <div className="parent">
       <Router>
-        <Main />
+          <Switch>
+            <Route path ="/notfound" component={PageNotFound} />
+            <Route exact path="/" component={welcome} />
+            <Route path="/login" component={Form} />
+            <Route path="/register" component={Registration} />
+            <RouteForAll path="/nopermision" component={NoPermision} />
+            <Route component={Main} />
+      </Switch>
+
       </Router>
-      
+    </div>
     </UserContext.Provider>
-  );      
+  );
 };
 
 export default App;

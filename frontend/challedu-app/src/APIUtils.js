@@ -7,14 +7,14 @@ export default class APIUtils {
   static async get(url, access_token) {
     return await issueAJAXRequest("GET", url, {}, access_token);
   }
-  static async delete(url) {
-    return await issueAJAXRequest("DELETE", url);
+  static async delete(url, access_token) {
+    return await issueAJAXRequest("DELETE", url, access_token);
   }
-  static async post(url, content) {
-    return await issueAJAXRequest("POST", url, content);
+  static async post(url, data, access_token) {
+    return await issueAJAXRequest("POST", url, data, access_token);
   }
-  static async put(url, content) {
-    return await issueAJAXRequest("PUT", url, content);
+  static async put(url, data, access_token) {
+    return await issueAJAXRequest("PUT", url, data, access_token);
   }
 }
 
