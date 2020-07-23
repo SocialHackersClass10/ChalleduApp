@@ -5,20 +5,22 @@ import './App.css';
 
 
 //Importing Components
-import LoginForm from "./components/LoginForm";
-import ProfileForm from "./components/ProfileForm";
-import welcome from "./components/welcome";
-import Navbar from "./components/Navigation"
-import RegisterForm from "./components/RegisterForm";
-import AllUsersList from "./components/AllUsersList";
-import MainContent from "./components/MainContent";
-import Users from "./components/Users"
-import Ngos from "./components/Ngos"
-import RouteForAll from "./components/RouteForAll";
-import RouteOnlyForAdmins from "./components/RouteOnlyForAdmins";
-import NoPermision from "./components/NoPermision";
-import PageNotFound from "./components/PageNotFound";
-import RedirectToNotFound from "./components/RedirectToNotFound";
+import LoginForm from "./Components/LoginForm";
+import ProfileForm from "./Components/ProfileForm";
+import welcome from "./Components/welcome";
+import Navbar from "./Components/Navigation"
+import RegisterForm from "./Components/RegisterForm";
+import AllUsersList from "./Components/AllUsersList";
+import MainContent from "./Components/MainContent";
+import Users from "./Components/Users"
+import Ngos from "./Components/Ngos"
+import User from "./Components/InfosUser"
+import Ngo from "./Components/InfosNgo"
+import RouteForAll from "./Components/RouteForAll";
+import RouteOnlyForAdmins from "./Components/RouteOnlyForAdmins";
+import NoPermision from "./Components/NoPermision";
+import PageNotFound from "./Components/PageNotFound";
+import RedirectToNotFound from "./Components/RedirectToNotFound";
 
 
 const Main = () => {
@@ -27,8 +29,9 @@ const Main = () => {
               <Switch>
                 <RouteForAll exact path="/main" component={MainContent} />
                 <RouteForAll path="/users" component={Users} />
-                <RouteForAll path="/user/:id" component={PageNotFound} /> {/*change here with the component of profile for each user  */}
+                <RouteForAll path="/user/:id" component={User} /> 
                 <RouteForAll path="/ngos" component={Ngos} />
+                <RouteForAll path="/ngo/:id" component={Ngo} />
                 <RouteOnlyForAdmins path="/usersList" component={AllUsersList} />
                 <RouteForAll path="/profileform" component={ProfileForm} />
                 <Route component={RedirectToNotFound} />

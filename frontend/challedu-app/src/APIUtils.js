@@ -15,6 +15,7 @@ export default class APIUtils {
   }
   static async put(url, data, access_token) {
     return await issueAJAXRequest("PUT", url, data, access_token);
+
   }
 }
 

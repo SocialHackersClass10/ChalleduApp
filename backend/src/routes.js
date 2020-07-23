@@ -283,7 +283,7 @@ router.post('/auth/login', async(req, res) => {
     const credentialsError = 'You provided a wrong set of credentials.';
 
     // here: ensure existance of requested document
-    if (user.length<1) return res.status(401).json({ error: credentialsError });
+    if (user.length < 1) return res.status(401).json({ error: credentialsError });
 
     // here: validate provided credentials
     const credentialsValid = await bcrypt.compare(password, user[0].password);
@@ -291,7 +291,6 @@ router.post('/auth/login', async(req, res) => {
 
     // here: validated, return success
     res.status(200).json(createJWTs(user[0].id, user[0].role));
-
 });
 
 // route for refresh process
@@ -315,7 +314,7 @@ function createJWTs(id, role) {
     return { access_token, refresh_token };
 }
 
-//#52
+// #52
 function getDocumentState(queryState) {
     if (documentStates.includes(queryState)) return queryState;
     return 'Approved';
