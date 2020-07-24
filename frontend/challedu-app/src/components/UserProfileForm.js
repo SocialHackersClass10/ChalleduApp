@@ -16,7 +16,6 @@ class UserProfileForm extends Component {
       picture: this.props.picture 
     };
 
-    console.log(props);
     
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);

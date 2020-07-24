@@ -1,31 +1,32 @@
 import React, { useState, useEffect, useContext } from "react";
 import UserContext from "../userContext";
-import NGOProvider from "../NGOProvider";
+import UserProvider from "../UserProvider";
 import Card from "./Card";
 import '../styles/Cards.css'
 
 
-function Ngos() {
-    const [ngos, setNGOs] = useState([]);
+function Users() {
+    const [users, setUsers] = useState([]);
     const [load, setLoad] = useState(false);
     const user = useContext(UserContext);
 
     useEffect(() => {
-        NGOProvider.getNGOs(user.tokens.access_token)
+        UserProvider.getUsers(user.tokens.access_token)
             .then((data) => {
                 console.log(data);
-                setNGOs(data.ngos);
+                setUsers(data.users);
                 setLoad(true);
             }).catch(err => {
                 console.log(err);
                 setLoad(true);
             })
+            //  eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     if (load) {
         return (
             <div className="profiles-list row">
-                { ngos.map((ngo, index) => <Card key={index} role="ngo" infos={ngo} />) }
+                { users.map((user, index) => <Card key={index} role="user" infos={user} />) }
             </div>    
         );    
     } else {
@@ -33,4 +34,4 @@ function Ngos() {
     }    
 };
 
-export default Ngos;
+export default Users;
