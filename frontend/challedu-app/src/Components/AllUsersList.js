@@ -5,9 +5,10 @@ import UserContext from "../userContext";
 function AllUsersList() {
   const [users, setUsers] = useState([]);
   const [load, setLoad] = useState(false);
+  const [status, setStatus] = useState(['Pending', 'Approved', 'Rejected'])
   const user = useContext(UserContext);
 
-  useEffect(() => {
+  const getUsers = () => {
     UserProvider.getUsers(user.tokens.access_token)
       .then((data) => {
         console.log(data);
@@ -17,8 +18,13 @@ function AllUsersList() {
         console.log(err);
         setLoad(true);
       })
+  }
 
-  }, []);
+  useEffect(getUsers, []);
+  const handleChange = async (e, id) => {
+    const result = await UserProvider.updateUser(id, { document_state: e.target.value }, localStorage.getItem('access_token'))
+    getUsers()
+  }
 
   if (load) {
     return (
@@ -40,7 +46,7 @@ function AllUsersList() {
                 <div class="FlexTable-cell--content title-content" key={index}>{index + 1}</div>
               </div>
               <div class="FlexTable-cell fname-cell">
-                <div class="FlexTable-cell--heading hide-in-mobile">Full Name</div>
+                <div class="FlexTable-cell--heading">Full Name</div>
                 <div class="FlexTable-cell--content title-content" key={users.full_name}>{users.full_name}</div>
               </div>
               <div class="FlexTable-cell username-cell">
@@ -57,15 +63,12 @@ function AllUsersList() {
               </div>
               <div class="FlexTable-cell status-cell">
                 <div class="FlexTable-cell--heading">Status</div>
-                {
-                  users.document_state === "Approved" ? (
-                    <div class="FlexTable-cell--content title-content" key={users.document_state}>{users.document_state}</div>
-                  ) : (
-                      <div class="FlexTable-cell--content title-content">Pending</div>
-                    )
-                }
+                <div class="FlexTable-cell--content title-content" key={users.document_state}>
+                  <select className="form-control" value={users.document_state} onChange={e => handleChange(e, users._id)}>
+                    {status.map(userStatus => <option>{userStatus}</option>).filter(state => state !== users.document_state)}
+                  </select>
+                </div>
               </div>
-
             </div>
           ))}
 

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import UserContext from "./userContext";
-import {BrowserRouter as Router, Route , Switch} from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import './App.css';
 
 
@@ -12,8 +12,10 @@ import Navbar from "./Components/Navigation"
 import Form from "./Components/Form";
 import AllUsersList from "./Components/AllUsersList";
 import MainContent from "./Components/MainContent";
-import Users from "./Components/Users"
-import Ngos from "./Components/Ngos"
+import Users from "./Components/Users";
+import Ngos from "./Components/Ngos";
+import User from "./Components/InfosUser";
+import Ngo from "./Components/InfosNgo";
 import RouteForAll from "./Components/RouteForAll";
 import RouteOnlyForAdmins from "./Components/RouteOnlyForAdmins";
 import NoPermision from "./Components/NoPermision";
@@ -23,16 +25,17 @@ import RedirectToNotFound from "./Components/RedirectToNotFound";
 
 const Main = () => {
   return (<div className="parent">
-            <Navbar />
-              <Switch>
-                <RouteForAll exact path="/main" component={MainContent} />
-                <RouteForAll path="/users" component={Users} />
-                <RouteForAll path="/user/:id" component={PageNotFound} /> {/*change here with the component of profile for each user  */}
-                <RouteForAll path="/ngos" component={Ngos} />
-                <RouteOnlyForAdmins path="/usersList" component={AllUsersList} />
-                <RouteForAll path="/profileform" component={ProfileForm} /> 
-                <Route component={RedirectToNotFound} />
-              </Switch>
+    <Navbar />
+    <Switch>
+      <RouteForAll exact path="/main" component={MainContent} />
+      <RouteForAll path="/users" component={Users} />
+      <RouteForAll path="/user/:id" component={User} />
+      <RouteForAll path="/ngos" component={Ngos} />
+      <RouteForAll path="/ngo/:id" component={Ngo} />
+      <RouteOnlyForAdmins path="/usersList" component={AllUsersList} />
+      <RouteForAll path="/profileform" component={ProfileForm} />
+      <Route component={RedirectToNotFound} />
+    </Switch>
   </div>)
 }
 
@@ -52,7 +55,7 @@ const App = () => {
     setUser({});
     setTokens({});
   }
-  
+
   return (
     <UserContext.Provider
       value={{
@@ -62,21 +65,21 @@ const App = () => {
         loginUser: loginUser,
         logout: logout
       }}>
-        <div className="parent">
-      <Router>
+      <div className="parent">
+        <Router>
           <Switch>
-            <Route path ="/notfound" component={PageNotFound} />
+            <Route path="/notfound" component={PageNotFound} />
             <Route exact path="/" component={welcome} />
             <Route path="/login" component={Form} />
             <Route path="/register" component={Registration} />
             <RouteForAll path="/nopermision" component={NoPermision} />
             <Route component={Main} />
-      </Switch>
-       
-      </Router>
-    </div>
+          </Switch>
+
+        </Router>
+      </div>
     </UserContext.Provider>
-  );      
+  );
 };
 
 export default App;
