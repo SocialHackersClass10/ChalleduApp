@@ -15,34 +15,34 @@ const Navigation = (props) => {
                 <NavbarToggler onClick={toggle} className="mr-2 mt-1 " />
                 <Collapse isOpen={!isOpen} navbar>
                     <Nav className="ml-auto" navbar>
-                        <NavItem  id="custom_button" className="nav_button px-2 ">
-                            <Link to="/main">
-                                <Button  className="btn-lg  col-sm-6 col-md-12" outline color="danger">Home</Button>
+                        <NavItem id="custom_button" className="nav_button px-2 ">
+                            <Link to="/main" onClick={toggle}>
+                                <Button className="btn-lg  col-sm-6 col-md-12" outline color="danger">Home</Button>
                             </Link>
                         </NavItem>
-                        <NavItem  id="custom_button" className="nav_button px-2">
-                            <Link to="/users">
-                                <Button   className="btn-lg  col-sm-6 col-md-12" outline color="success">Users</Button>
+                        <NavItem id="custom_button" className="nav_button px-2">
+                            <Link to="/users" onClick={toggle}>
+                                <Button className="btn-lg  col-sm-6 col-md-12" outline color="success">Users</Button>
                             </Link>
                         </NavItem>
-                        <NavItem  id="custom_button"className="nav_button px-2">
-                            <Link to="/ngos">
-                                <Button   className="btn-lg  col-sm-6 col-md-12" outline color="success">NGO</Button>
+                        <NavItem id="custom_button" className="nav_button px-2">
+                            <Link to="/ngos" onClick={toggle}>
+                                <Button className="btn-lg  col-sm-6 col-md-12" outline color="success">NGO</Button>
                             </Link>
                         </NavItem>
-                        <NavItem  id="custom_button"className="nav_button px-2">
-                            <Link to="/usersList">
-                                <Button   className="btn-lg  col-sm-6 col-md-12" outline color="success">Admin</Button>
+                        <NavItem id="custom_button" className="nav_button px-2">
+                            <Link to="/usersList" onClick={toggle}>
+                                <Button className="btn-lg  col-sm-6 col-md-12" outline color="success">Admin</Button>
                             </Link>
                         </NavItem>
-                        <NavItem  id="custom_button" className="nav_button px-2">
-                            <Link to="/profileform">
-                                <Button   className="btn-lg col-xs-3 col-sm-6 col-md-12" outline color="info">Profile</Button>
+                        <NavItem id="custom_button" className="nav_button px-2">
+                            <Link to="/profileform" onClick={toggle}>
+                                <Button className="btn-lg col-xs-3 col-sm-6 col-md-12" outline color="info">Profile</Button>
                             </Link>
                         </NavItem>
-                        <NavItem   id="custom_button" className="nav_button px-2">
-                            <Link to="/">
-                                <Button   className="btn-lg col-xs-3 col-sm-6 col-md-12 " outline color="danger">Exit</Button>
+                        <NavItem id="custom_button" className="nav_button px-2">
+                            <Link to="/" onClick={toggle}>
+                                <Button className="btn-lg col-xs-3 col-sm-6 col-md-12 " outline color="danger">Exit</Button>
                             </Link>
                         </NavItem>
                     </Nav>
