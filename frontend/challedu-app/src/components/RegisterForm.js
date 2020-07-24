@@ -1,27 +1,40 @@
 import React, { Component } from 'react'
 import UserProvider from "../UserProvider";
-import { Button, Card, CardBody, Col, Container,
+import { Button, Card, CardBody, Col, Container, 
     Form, Input, InputGroup, Row } from 'reactstrap';
+import RegisterPopup from "./RegisterPopup";
 import logo from '../images/logo.svg';
 import '../App.css';
 
-export default class RegisterForm extends Component {
-    constructor() {
+export default class RegisterComponent extends Component {
+    constructor(props) {
         super()
         this.state = {
             full_name:'',
             email: '',
             password: '',
             password2:'',
-            role:'user-independent'
+            role:'user-independent',
+            showPopup: false,
+            text:'register'
         }
+      
         this.full_name = this.full_name.bind(this);
         this.email = this.email.bind(this);
         this.password = this.password.bind(this);
         this.password2 = this.password2.bind(this);
         this.role = this.role.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this)
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.togglePopup = this.togglePopup.bind(this);
     }
+
+    togglePopup(sms) {
+      this.setState({
+        showPopup: !this.state.showPopup,
+        text:sms
+      });
+    }
+
     full_name(e) {
       this.setState({full_name: e.target.value})
   }
@@ -39,16 +52,27 @@ export default class RegisterForm extends Component {
     }
     handleSubmit(e) {
         e.preventDefault();
-    const { full_name, email, password, password2, role  } = this.state;
+    const { full_name, email, password, password2,role  } = this.state;
 
     if(password!==password2){
-            alert('Ooppps ! Your password doesn`t match')
+            alert('Ooppps ! Your password doesn`t match') 
         }else{
+        
+   const userData = {full_name, email, password, role }; 
+   
+   UserProvider.createUser(userData)
+    .then(
+      userData => {
+      this.togglePopup("Register SUCCESS after approvment you can Login");
+       },
+    error => {
+      error.toString();
+      this.togglePopup("REGISTER ERROR");
+       }
+     );
 
-   const userData = {full_name, email, password, role };
-   UserProvider.createUser(userData);
-        }
-    }
+      }
+    } 
     render() {
       return(
         <div className="app flex-row align-items center">
@@ -77,15 +101,23 @@ export default class RegisterForm extends Component {
                                <Input type='password' onChange={this.password2} placeholder='confirm password'></Input>
                             </InputGroup>
                             <select value={this.state.value} onChange={this.role}>
-                               <option value='user-independent'>User</option>
+                               <option value='userData -independent'>User</option>
                                <option value="user-ngo">NGO</option>
                             </select>
                          <Button onClick={this.handleSubmit} color='success' block>Register</Button>
+                         {this.state.showPopup ?
+         <RegisterPopup
+          text={this.state.text}
+          closePopup={this.togglePopup.bind(this)}
+         />
+         : null
+       }
                         </Form>
                     </CardBody>
                    </Card>
                  </Col>
              </Row>
+            
          </Container>
       </div>
       )
