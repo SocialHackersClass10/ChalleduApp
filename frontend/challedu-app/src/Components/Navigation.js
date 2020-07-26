@@ -3,11 +3,16 @@ import { Navbar, NavbarBrand, Nav, NavItem, Button, NavbarToggler, Collapse } fr
 import '../App.css';
 import logo from '../images/logo.svg';
 import { Link } from "react-router-dom"
+import { useMediaQuery } from 'react-responsive'
 
 
 const Navigation = (props) => {
     const [isOpen, setIsOpen] = useState(true);
     const toggle = () => setIsOpen(!isOpen);
+
+    const isMobile = useMediaQuery({ query: '(max-width: 767px)' })
+    const closeWhenClicked = () => { if (isMobile) { toggle() } }
+
     return (
         <div>
             <Navbar color="warning" light expand="md">
@@ -16,32 +21,32 @@ const Navigation = (props) => {
                 <Collapse isOpen={!isOpen} navbar>
                     <Nav className="ml-auto" navbar>
                         <NavItem id="custom_button" className="nav_button px-2 ">
-                            <Link to="/main" onClick={toggle}>
+                            <Link to="/main" onClick={closeWhenClicked}>
                                 <Button className="btn-lg  col-sm-6 col-md-12" outline color="danger">Home</Button>
                             </Link>
                         </NavItem>
                         <NavItem id="custom_button" className="nav_button px-2">
-                            <Link to="/users" onClick={toggle}>
+                            <Link to="/users" onClick={closeWhenClicked}>
                                 <Button className="btn-lg  col-sm-6 col-md-12" outline color="success">Users</Button>
                             </Link>
                         </NavItem>
                         <NavItem id="custom_button" className="nav_button px-2">
-                            <Link to="/ngos" onClick={toggle}>
+                            <Link to="/ngos" onClick={closeWhenClicked}>
                                 <Button className="btn-lg  col-sm-6 col-md-12" outline color="success">NGO</Button>
                             </Link>
                         </NavItem>
                         <NavItem id="custom_button" className="nav_button px-2">
-                            <Link to="/usersList" onClick={toggle}>
+                            <Link to="/usersList" onClick={closeWhenClicked}>
                                 <Button className="btn-lg  col-sm-6 col-md-12" outline color="success">Admin</Button>
                             </Link>
                         </NavItem>
                         <NavItem id="custom_button" className="nav_button px-2">
-                            <Link to="/profileform" onClick={toggle}>
+                            <Link to="/profileform" onClick={closeWhenClicked}>
                                 <Button className="btn-lg col-xs-3 col-sm-6 col-md-12" outline color="info">Profile</Button>
                             </Link>
                         </NavItem>
                         <NavItem id="custom_button" className="nav_button px-2">
-                            <Link to="/" onClick={toggle}>
+                            <Link to="/" onClick={closeWhenClicked}>
                                 <Button className="btn-lg col-xs-3 col-sm-6 col-md-12 " outline color="danger">Exit</Button>
                             </Link>
                         </NavItem>
