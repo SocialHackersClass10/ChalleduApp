@@ -1,9 +1,11 @@
 import React from "react"
 
+const iframeStyle = {width: '100vw', height:"100vh"};
+
 const MainContent = ()=>{
     return(
         <div>
-        <h1>Main content</h1>
+        <iframe style={iframeStyle} src="http://challedu.com" title="Challedu"></iframe>
         </div>
     )
     
