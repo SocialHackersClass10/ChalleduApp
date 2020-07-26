@@ -1,6 +1,6 @@
 import React from "react"
 
-const iframeStyle = {width: '100vw', height:"100vh"};
+const iframeStyle = {width: "100vw", height: "100vh"};
 
 const MainContent = ()=>{
     return(
