@@ -21,12 +21,13 @@ import RouteOnlyForAdmins from "./components/RouteOnlyForAdmins";
 import NoPermision from "./components/NoPermision";
 import PageNotFound from "./components/PageNotFound";
 import RedirectToNotFound from "./components/RedirectToNotFound";
-
+import ImageUpload from "./components/ImageUpload";
 
 const Main = () => {
   return (<div className="parent">
             <Navbar />
               <Switch>
+                <RouteForAll path="/upload" component={ImageUpload} />
                 <RouteForAll exact path="/main" component={MainContent} />
                 <RouteForAll path="/users" component={Users} />
                 <RouteForAll path="/user/:id" component={User} /> 

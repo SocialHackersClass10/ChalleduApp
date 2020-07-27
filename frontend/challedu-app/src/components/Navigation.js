@@ -16,6 +16,11 @@ const Navigation = (props) => {
                 <Collapse isOpen={!isOpen} navbar>
                     <Nav className="ml-auto" navbar>
                         <NavItem  id="custom_button" className="nav_button px-2 ">
+                            <Link to="/upload">
+                                <Button  className="btn-lg  col-sm-6 col-md-12" outline color="info">Image Upload</Button>
+                            </Link>
+                        </NavItem>
+                        <NavItem  id="custom_button" className="nav_button px-2 ">
                             <Link to="/main">
                                 <Button  className="btn-lg  col-sm-6 col-md-12" outline color="danger">Home</Button>
                             </Link>
