@@ -45,9 +45,22 @@ router.get('/users/:id', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, a
 });
 
 // endpoint: Update a user
-router.put('/users/:id', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algorithms: ['HS256'] }), validateRoles(['admin']), async(req, res) => {
+// issue081 unlock user-update endpoint
+// here:        unlock endpoint access for all user-roles
+// comment out: router.put('/users/:id', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algorithms: ['HS256'] }), validateRoles(['admin']), async(req, res) => {
+router.put('/users/:id', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algorithms: ['HS256'] }), validateRoles(['user-ngo', 'user-independent', 'admin']), async(req, res) => {
     const userId = req.params.id;
-    const userData = req.body;
+
+    // issue081 unlock user-update endpoint
+    // here:        conditionally remove field-values, based on user-role
+    // comment out: const userData = req.body;
+    let userData;
+    if (req.user.role === 'admin') {
+        userData = req.body;
+    } else {
+        userData = removeObjectProperties(req.body, ['role', 'document_state']);
+    };
+
     try {
         await User.findByIdAndUpdate(userId, { $set: userData });
         res.status(200).json({ _id: userId });
@@ -319,5 +332,13 @@ function getDocumentState(queryState) {
     if (documentStates.includes(queryState)) return queryState;
     return 'Approved';
 }
+
+// issue081 unlock user-update endpoint
+// here: implement helper function
+function removeObjectProperties(originalObject={},propNamesArray=[]){
+    const result = originalObject;
+    for (i of propNamesArray) delete result[i];
+    return result;
+};
 
 module.exports = router;
