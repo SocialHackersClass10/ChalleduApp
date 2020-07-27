@@ -336,7 +336,7 @@ function getDocumentState(queryState) {
 // issue081 unlock user-update endpoint
 // here: implement helper function
 function removeObjectProperties(originalObject={},propNamesArray=[]){
-    const result = originalObject;
+    const result = JSON.parse(JSON.stringify(originalObject));
     for (i of propNamesArray) delete result[i];
     return result;
 };
