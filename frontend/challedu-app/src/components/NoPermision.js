@@ -14,7 +14,7 @@ const NoPermision = ()=>{
         <div id="welcome_msg">
         <h1>No permission</h1>
         <h2>Admins only</h2>
-        <Button onClick={goBack}>
+        <Button onClick={goBack} color="danger" size="lg">
             Back
         </Button>
         </div>
