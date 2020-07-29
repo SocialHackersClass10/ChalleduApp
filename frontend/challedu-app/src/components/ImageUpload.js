@@ -1,13 +1,24 @@
 import React, { Component } from 'react';
 import { Button, Container, Form, InputGroup } from 'reactstrap';
+import RegisterPopup from "./RegisterPopup";
 
 class ImageUpload extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            selectedFile: null
+            selectedFile: null,
+            showPopup: false,
+            text:'register'
         }
     }
+
+    togglePopup(sms) {
+        this.setState({
+          showPopup: !this.state.showPopup,
+          text:sms
+        });
+      }
+
     handleChange = event => { 
         // console.log(typeof(event.target.files)) 
         this.setState({ selectedFile: event.target.files[0] }); 
@@ -25,8 +36,17 @@ class ImageUpload extends Component {
             body: formData
         })
         .then(res => res.json())
-        .then(file => console.log(file))
-        .catch(error => console.log(error.message));
+        .then(file =>{ 
+            console.log(file.message)
+                if (file.message=='Success'){
+                    this.togglePopup("Upload SUCCESS");
+                }else{
+                    this.togglePopup("Upload ERROR");}
+                    },
+            error => {
+            console.log(error.message)
+            this.togglePopup("Connection ERROR");
+        });
     }; 
     fileData = () => { 
         if (this.state.selectedFile) { 
@@ -62,6 +82,13 @@ class ImageUpload extends Component {
                     </Container>
                 </div>
                 {this.fileData()} 
+                {this.state.showPopup ?
+         <RegisterPopup
+          text={this.state.text}
+          closePopup={this.togglePopup.bind(this)}
+         />
+         : null
+       }
             </div> 
         ); 
     };
