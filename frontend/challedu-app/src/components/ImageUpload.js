@@ -8,7 +8,7 @@ class ImageUpload extends Component {
         this.state = {
             selectedFile: null,
             showPopup: false,
-            text:'register'
+            text:'upload'
         }
     }
 
@@ -37,14 +37,13 @@ class ImageUpload extends Component {
         })
         .then(res => res.json())
         .then(file =>{ 
-            console.log(file.message)
                 if (file.message=='Success'){
                     this.togglePopup("Upload SUCCESS");
                 }else{
                     this.togglePopup("Upload ERROR");}
                     },
             error => {
-            console.log(error.message)
+            // console.log(error.message)
             this.togglePopup("Connection ERROR");
         });
     }; 
