@@ -4,23 +4,23 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import './App.css';
 
 
-//Importing Components
-import Registration from "./Components/Registration";
-import ProfileForm from "./Components/ProfileForm";
-import welcome from "./Components/welcome";
-import Navbar from "./Components/Navigation"
-import Form from "./Components/Form";
-import AllUsersList from "./Components/AllUsersList";
-import MainContent from "./Components/MainContent";
-import Users from "./Components/Users";
-import Ngos from "./Components/Ngos";
-import User from "./Components/InfosUser";
-import Ngo from "./Components/InfosNgo";
-import RouteForAll from "./Components/RouteForAll";
-import RouteOnlyForAdmins from "./Components/RouteOnlyForAdmins";
-import NoPermision from "./Components/NoPermision";
-import PageNotFound from "./Components/PageNotFound";
-import RedirectToNotFound from "./Components/RedirectToNotFound";
+//Importing components
+import Registration from "./components/Registration";
+import ProfileForm from "./components/ProfileForm";
+import welcome from "./components/welcome";
+import Navbar from "./components/Navigation"
+import Form from "./components/Form";
+import AllUsersList from "./components/AllUsersList";
+import MainContent from "./components/MainContent";
+import Users from "./components/Users";
+import Ngos from "./components/Ngos";
+import User from "./components/InfosUser";
+import Ngo from "./components/InfosNgo";
+import RouteForAll from "./components/RouteForAll";
+import RouteOnlyForAdmins from "./components/RouteOnlyForAdmins";
+import NoPermision from "./components/NoPermision";
+import PageNotFound from "./components/PageNotFound";
+import RedirectToNotFound from "./components/RedirectToNotFound";
 
 
 const Main = () => {

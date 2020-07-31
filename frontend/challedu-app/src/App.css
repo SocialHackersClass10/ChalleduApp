@@ -90,10 +90,6 @@
 
 /* Users admin table */
 
-* {
-  box-sizing: border-box;
-}
-
 .wrapper {
   width: 100%;
   max-width: 1000px;
@@ -151,7 +147,6 @@
   display: flex;
 }
 .FlexTable .FlexTable-row .FlexTable-cell {
-  box-sizing: border-box;
   -webkit-box-flex: 1;
           flex-grow: 1;
   padding: 0.8em 1.2em;
@@ -179,7 +174,6 @@
     box-shadow: none;
   }
   .FlexTable--collapse .FlexTable-row {
-    box-sizing: border-box;
     width: 100%;
     display: -webkit-box;
     display: flex;
