@@ -1,4 +1,6 @@
 import React from 'react';
+import { Button } from "reactstrap";
+
 
 
 class RegisterPopup extends React.Component {
@@ -8,7 +10,7 @@ class RegisterPopup extends React.Component {
       <div className='popup'>
         <div className='popup_inner'>
           <h1>{this.props.text}</h1>
-        <button style={{backgroundColor:'rgb(20, 150, 250)',color:'white'}} onClick={this.props.closePopup}>close me</button>
+        <Button color='primary' onClick={this.props.closePopup}>close me</Button>
         </div>
       </div>
     );
