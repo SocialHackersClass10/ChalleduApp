@@ -16,38 +16,38 @@ const Navigation = (props) => {
                 <Collapse isOpen={!isOpen} navbar>
                     <Nav className="ml-auto" navbar>
                         <NavItem  id="custom_button" className="nav_button px-2 ">
-                            <Link to="/upload">
-                                <Button  className="btn-lg  col-sm-6 col-md-12" outline color="info">Image Upload</Button>
-                            </Link>
-                        </NavItem>
-                        <NavItem  id="custom_button" className="nav_button px-2 ">
                             <Link to="/main">
-                                <Button  className="btn-lg  col-sm-6 col-md-12" outline color="danger">Home</Button>
+                                <Button  className="btn-md  col-sm-6 col-md-12" outline color="danger">Home</Button>
                             </Link>
                         </NavItem>
                         <NavItem  id="custom_button" className="nav_button px-2">
                             <Link to="/users">
-                                <Button   className="btn-lg  col-sm-6 col-md-12" outline color="success">Users</Button>
+                                <Button   className="btn-md  col-sm-6 col-md-12" outline color="success">Users</Button>
                             </Link>
                         </NavItem>
                         <NavItem  id="custom_button"className="nav_button px-2">
                             <Link to="/ngos">
-                                <Button   className="btn-lg  col-sm-6 col-md-12" outline color="success">NGO</Button>
+                                <Button   className="btn-md  col-sm-6 col-md-12" outline color="success">NGO</Button>
                             </Link>
                         </NavItem>
                         <NavItem  id="custom_button"className="nav_button px-2">
                             <Link to="/usersList">
-                                <Button   className="btn-lg  col-sm-6 col-md-12" outline color="success">Admin</Button>
+                                <Button   className="btn-md  col-sm-6 col-md-12" outline color="success">Admin</Button>
                             </Link>
                         </NavItem>
                         <NavItem  id="custom_button" className="nav_button px-2">
                             <Link to="/profileform">
-                                <Button   className="btn-lg col-xs-3 col-sm-6 col-md-12" outline color="info">Profile</Button>
+                                <Button   className="btn-md col-xs-3 col-sm-6 col-md-12" outline color="info">Profile</Button>
+                            </Link>
+                        </NavItem>
+                        <NavItem  id="custom_button" className="nav_button px-2 ">
+                            <Link to="/upload">
+                                <Button  className="btn-md  col-sm-6 col-md-12" outline color="info">Image Upload</Button>
                             </Link>
                         </NavItem>
                         <NavItem   id="custom_button" className="nav_button px-2">
                             <Link to="/">
-                                <Button   className="btn-lg col-xs-3 col-sm-6 col-md-12 " outline color="danger">Exit</Button>
+                                <Button   className="btn-md col-xs-3 col-sm-6 col-md-12 " outline color="danger">Exit</Button>
                             </Link>
                         </NavItem>
                     </Nav>

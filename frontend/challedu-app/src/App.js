@@ -27,7 +27,6 @@ const Main = () => {
   return (<div className="parent">
             <Navbar />
               <Switch>
-                <RouteForAll path="/upload" component={ImageUpload} />
                 <RouteForAll exact path="/main" component={MainContent} />
                 <RouteForAll path="/users" component={Users} />
                 <RouteForAll path="/user/:id" component={User} /> 
@@ -35,6 +34,7 @@ const Main = () => {
                 <RouteForAll path="/ngo/:id" component={Ngo} />
                 <RouteOnlyForAdmins path="/usersList" component={AllUsersList} />
                 <RouteForAll path="/profileform" component={ProfileForm} />
+                <RouteForAll path="/upload" component={ImageUpload} />
                 <Route component={RedirectToNotFound} />
               </Switch>
   </div>)
