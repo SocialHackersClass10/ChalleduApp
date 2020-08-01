@@ -76,9 +76,9 @@ export default class RegisterComponent extends Component {
     render() {
       return(
         <div className="app flex-row align-items center">
-          <img className="img-responsive" id="logo" src={logo} alt="logo" />
             <Container>
               <Row className='justify-content-center'>
+              <img className="img-responsive" id="logo" src={logo} alt="logo" />
                 <Col md='9' lg='7' xl='6'>
                   <Card className='mx-4'>
                     <CardBody className='p-4'>
@@ -105,13 +105,13 @@ export default class RegisterComponent extends Component {
                                <option value="user-ngo">NGO</option>
                             </select>
                          <Button onClick={this.handleSubmit} color='success' block>Register</Button>
-                         {this.state.showPopup ?
-         <RegisterPopup
-          text={this.state.text}
-          closePopup={this.togglePopup.bind(this)}
-         />
-         : null
-       }
+              {this.state.showPopup ?
+              <RegisterPopup
+                 text={this.state.text}
+                  closePopup={this.togglePopup.bind(this)}
+              />
+                : null
+               }
                         </Form>
                     </CardBody>
                    </Card>
