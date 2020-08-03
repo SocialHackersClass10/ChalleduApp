@@ -1,14 +1,20 @@
 import APIUtils from "./APIUtils";
 
 export default class UserProvider {
-  static async getUsers(access_token) {
-    return await APIUtils.get("users/", access_token);
+  static async getRejectedUsers(accessToken) {
+    return await APIUtils.get("users/?state=Rejected", accessToken);
   }
-  static async getUser(id, access_token) {
-    return await APIUtils.get(`users/${id}`, access_token);
+  static async getPendingUsers(accessToken) {
+    return await APIUtils.get("users/?state=Pending", accessToken);
+  }
+  static async getUsers(accessToken) {
+    return await APIUtils.get("users/", accessToken);
+  }
+  static async getUser(id, accessToken) {
+    return await APIUtils.get(`users/${id}`, accessToken);
   }
   static async createUser(userData) {
-    return await APIUtils.post("users/", userData);
+    return await APIUtils.post(`users/`, userData);
   }
   static async updateUser(id, userData, access_token) {
     return await APIUtils.put(`users/${id}`, userData, access_token);

@@ -21,6 +21,7 @@ function AllUsersList() {
   }
 
   useEffect(getUsers, []);
+
   const handleChange = async (e, id) => {
     const result = await UserProvider.updateUser(id, { document_state: e.target.value }, localStorage.getItem('access_token'))
     getUsers()

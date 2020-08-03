@@ -70,8 +70,8 @@ const App = () => {
           <Switch>
             <Route path="/notfound" component={PageNotFound} />
             <Route exact path="/" component={welcome} />
-            <Route path="/login" component={Form} />
-            <Route path="/register" component={Registration} />
+            <Route path="/login" component={LoginForm} />
+            <Route path="/register" component={RegisterForm} />
             <RouteForAll path="/nopermision" component={NoPermision} />
             <Route component={Main} />
           </Switch>
