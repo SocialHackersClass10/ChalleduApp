@@ -45,8 +45,8 @@ const Form = () => {
           access_token: loginResult.access_token,
           refresh_token: loginResult.refresh_token
       });
-      sessionStorage.setItem('access_token', loginResult.access_token)
-      sessionStorage.setItem('refresh_token', loginResult.refresh_token)
+      localStorage.setItem('access_token', loginResult.access_token)
+      localStorage.setItem('refresh_token', loginResult.refresh_token)
       
       // seperate the payload from the access_token and decode it from base64
       let payload = JSON.parse(atob(loginResult.access_token.split(".")[1]));
