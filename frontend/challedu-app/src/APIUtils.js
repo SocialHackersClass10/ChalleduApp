@@ -8,7 +8,7 @@ export default class APIUtils {
     return await issueAJAXRequest("GET", url, {}, access_token);
   }
   static async delete(url, access_token) {
-    return await issueAJAXRequest("DELETE", url, access_token);
+    return await issueAJAXRequest("DELETE", url, {}, access_token);
   }
   static async post(url, data, access_token) {
     return await issueAJAXRequest("POST", url, data, access_token);
