@@ -99,7 +99,7 @@
   margin: auto;  
   background-color: rgba(0,0,0, 0.5);  
 }  
-.popupInner {  
+.popup-inner {  
   position: absolute;  
   left: 25%;  
   right: 25%;  
