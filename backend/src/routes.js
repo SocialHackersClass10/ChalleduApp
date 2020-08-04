@@ -318,9 +318,7 @@ router.post('/auth/refresh', (req, res) => {
 });
 
 function createJWTs(id, role) {
-    const payload = {
-        id
-    };
+    const payload = { id };
     const refresh_token = jwt.sign(payload, process.env.REFRESH_TOKEN_KEY, { expiresIn: '168h' });
     payload.role = role;
     const access_token = jwt.sign(payload, process.env.ACCESS_TOKEN_KEY, { expiresIn: '24h' });
@@ -335,9 +333,9 @@ function getDocumentState(queryState) {
 
 // issue081 unlock user-update endpoint
 // here: implement helper function
-function removeObjectProperties(originalObject={},propNamesArray=[]){
+function removeObjectProperties(originalObject={}, propNamesArray=[]) {
     const result = JSON.parse(JSON.stringify(originalObject));
-    for (i of propNamesArray) delete result[i];
+    for (let propName of propNamesArray) delete result[propName];
     return result;
 };
 
