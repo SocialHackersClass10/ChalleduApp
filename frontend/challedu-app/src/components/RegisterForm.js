@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import UserProvider from "../UserProvider";
-import { Button, Card, CardBody, Col, Container, 
+import { Button, Card, CardBody, Col, Container,
     Form, Input, InputGroup, Row } from 'reactstrap';
 import RegisterPopup from "./RegisterPopup";
 import logo from '../images/logo.svg';
@@ -18,7 +18,7 @@ export default class RegisterComponent extends Component {
             showPopup: false,
             text:'register'
         }
-      
+
         this.full_name = this.full_name.bind(this);
         this.email = this.email.bind(this);
         this.password = this.password.bind(this);
@@ -55,11 +55,11 @@ export default class RegisterComponent extends Component {
     const { full_name, email, password, password2,role  } = this.state;
 
     if(password!==password2){
-            alert('Ooppps ! Your password doesn`t match') 
+            alert('Ooppps ! Your password doesn`t match')
         }else{
-        
-   const userData = {full_name, email, password, role }; 
-   
+
+   const userData = {full_name, email, password, role };
+
    UserProvider.createUser(userData)
     .then(
       userData => {
@@ -72,7 +72,7 @@ export default class RegisterComponent extends Component {
      );
 
       }
-    } 
+    }
     render() {
       return(
         <div className="app flex-row align-items center">
@@ -101,7 +101,7 @@ export default class RegisterComponent extends Component {
                                <Input type='password' onChange={this.password2} placeholder='confirm password'></Input>
                             </InputGroup>
                             <select value={this.state.value} onChange={this.role}>
-                               <option value='userData -independent'>User</option>
+                               <option value='user-independent'>User</option>
                                <option value="user-ngo">NGO</option>
                             </select>
                          <Button onClick={this.handleSubmit} color='success' block>Register</Button>
@@ -117,7 +117,7 @@ export default class RegisterComponent extends Component {
                    </Card>
                  </Col>
              </Row>
-            
+
          </Container>
       </div>
       )

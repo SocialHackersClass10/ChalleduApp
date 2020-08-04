@@ -5,11 +5,9 @@ import './App.css';
 
 
 //Importing components
-import Registration from "./components/Registration";
 import ProfileForm from "./components/ProfileForm";
 import welcome from "./components/welcome";
 import Navbar from "./components/Navigation"
-import Form from "./components/Form";
 import AllUsersList from "./components/AllUsersList";
 import MainContent from "./components/MainContent";
 import Users from "./components/Users";
@@ -21,6 +19,8 @@ import RouteOnlyForAdmins from "./components/RouteOnlyForAdmins";
 import NoPermision from "./components/NoPermision";
 import PageNotFound from "./components/PageNotFound";
 import RedirectToNotFound from "./components/RedirectToNotFound";
+import RegisterForm from "./components/RegisterForm";
+import LoginForm from "./components/LoginForm";
 
 
 const Main = () => {
