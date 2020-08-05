@@ -3,7 +3,7 @@ import { Button } from "reactstrap";
 
 
 
-class RegisterPopup extends React.Component {
+class ModelPopup extends React.Component {
   render() {
     return (
         
@@ -20,4 +20,4 @@ class RegisterPopup extends React.Component {
 }
 
 
-export default RegisterPopup;
+export default ModelPopup;

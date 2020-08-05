@@ -6,7 +6,7 @@ import { Button } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../App.css';
 import logo from '../images/logo.svg';
-import RegisterPopup from "./RegisterPopup";
+import ModelPopup from "./ModelPopup";
 
 
 const buttonStyle = { maxWidth: 200, margin: '20px  auto 10px ' };
@@ -118,7 +118,7 @@ const Form = () => {
         </div>
         </div>
         {pop.showPopup ?
-         <RegisterPopup
+         <ModelPopup
           text={pop.text}
          />
          : null
