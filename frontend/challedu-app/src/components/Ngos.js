@@ -9,7 +9,7 @@ function Ngos() {
     const [ngos, setNGOs] = useState([]);
     const [load, setLoad] = useState(false);
     const user = useContext(UserContext);
-
+    console.log(user);
     useEffect(() => {
         NGOProvider.getNGOs(user.tokens.access_token)
             .then((data) => {
