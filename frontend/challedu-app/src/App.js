@@ -4,12 +4,13 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import './App.css';
 
 
-//Importing components
-import Registration from "./components/Registration";
+
+//Importing Components
+import LoginForm from "./components/LoginForm";
+import RegisterForm from "./components/RegisterForm";
 import ProfileForm from "./components/ProfileForm";
 import welcome from "./components/welcome";
 import Navbar from "./components/Navigation"
-import Form from "./components/Form";
 import AllUsersList from "./components/AllUsersList";
 import MainContent from "./components/MainContent";
 import Users from "./components/Users";
