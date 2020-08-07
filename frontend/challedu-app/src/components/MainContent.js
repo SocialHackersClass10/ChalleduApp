@@ -5,7 +5,6 @@ import NGOProvider from "../NGOProvider";
 import Ngoimg from '../images/Ngoimg.png';
 import Userimg from '../images/Userimg.png';
 import '../App.css';
-import {Card, CardText, CardDeck, CardBody} from 'reactstrap';
 
 const MainContent = ()=>{
     const [users, setUsers] = useState([]);
@@ -48,21 +47,21 @@ const MainContent = ()=>{
             Academy</a> students of Class 10 and <a href="http://challedu.com/">Challedu.</a>
                 </p>
 
-    <CardDeck className="cardDeck">
-        <Card className="mainCard" body color="warning">
-            <img class="cardphoto" src={Userimg} alt="Card image cap"/>
-            <CardBody>
-            <CardText>Total registered Users:<b> {users.length} </b></CardText>
-                </CardBody>
-      </Card>
+            <table class="cardDeck">
+                <th>
+                    <div class="mainCard">
+                        <img class="cardphoto" src={Userimg} alt="Card image cap"/>
+                        <div>Total registered Users:<b> {users.length} </b></div>
+                    </div>
+                </th>
 
-        <Card className="mainCard" body color="warning">
-            <img class="cardphoto" src={Ngoimg} alt="Card image cap" />
-            <CardBody>
-            <CardText>Total registered NGO:<b> {ngos.length} </b></CardText>
-                </CardBody>
-        </Card>
-      </CardDeck>
+                <th>
+                    <div  class="mainCard">
+                    <img class="cardphoto" src={Ngoimg} alt="Card image cap" />
+                    <div>Total registered NGO:<b> {ngos.length} </b></div>
+                    </div>
+                </th>
+            </table>
       </div>
     )
 }
