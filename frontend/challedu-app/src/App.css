@@ -255,6 +255,7 @@
 /*Main content page card images
 =========================*/
 #mainContentPage{
+  margin: 1em 2em 0em 2em;
   text-align: center;
   font-size: 1.2em;
 }
