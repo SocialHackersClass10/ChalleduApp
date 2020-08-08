@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Navbar, NavbarBrand, Nav, NavItem, Button, NavbarToggler, Collapse } from 'reactstrap';
 import '../App.css';
 import logo from '../images/logo.svg';
 import { Link } from "react-router-dom"
+import UserContrext from '../userContext';
 
 
 const Navigation = (props) => {
     const [isOpen, setIsOpen] = useState(true);
     const toggle = () => setIsOpen(!isOpen);
+    const user = useContext(UserContrext);
     return (
         <div>
             <Navbar color="warning" light expand="md">
@@ -42,7 +44,8 @@ const Navigation = (props) => {
                         </NavItem>
                         <NavItem  id="custom_button" className="nav_button px-2 ">
                             <Link to="/upload">
-                                <Button  className="btn-md  col-sm-6 col-md-12" outline color="info">Image Upload</Button>
+                            <Button style={{display: Object.keys(user.user).length && user.user.user.role === "admin" && "none"}}
+                                className="btn-md  col-sm-6 col-md-12" outline color="info">Image Upload</Button>
                             </Link>
                         </NavItem>
                         <NavItem   id="custom_button" className="nav_button px-2">
