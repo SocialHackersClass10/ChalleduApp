@@ -4,7 +4,7 @@ import UserProvider from "../UserProvider";
 import NGOProvider from "../NGOProvider";
 import Ngoimg from '../images/Ngoimg.png';
 import Userimg from '../images/Userimg.png';
-import '../App.css';
+import '../styles/MainContent.css';
 
 const MainContent = ()=>{
     const [users, setUsers] = useState([]);
