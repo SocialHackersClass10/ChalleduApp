@@ -22,21 +22,22 @@ import RouteOnlyForAdmins from "./components/RouteOnlyForAdmins";
 import NoPermision from "./components/NoPermision";
 import PageNotFound from "./components/PageNotFound";
 import RedirectToNotFound from "./components/RedirectToNotFound";
-
+import ImageUpload from "./components/ImageUpload";
 
 const Main = () => {
   return (<div className="parent">
-    <Navbar />
-    <Switch>
-      <RouteForAll exact path="/main" component={MainContent} />
-      <RouteForAll path="/users" component={Users} />
-      <RouteForAll path="/user/:id" component={User} />
-      <RouteForAll path="/ngos" component={Ngos} />
-      <RouteForAll path="/ngo/:id" component={Ngo} />
-      <RouteOnlyForAdmins path="/usersList" component={AllUsersList} />
-      <RouteForAll path="/profileform" component={ProfileForm} />
-      <Route component={RedirectToNotFound} />
-    </Switch>
+            <Navbar />
+              <Switch>
+                <RouteForAll exact path="/main" component={MainContent} />
+                <RouteForAll path="/users" component={Users} />
+                <RouteForAll path="/user/:id" component={User} /> 
+                <RouteForAll path="/ngos" component={Ngos} />
+                <RouteForAll path="/ngo/:id" component={Ngo} />
+                <RouteOnlyForAdmins path="/usersList" component={AllUsersList} />
+                <RouteForAll path="/profileform" component={ProfileForm} />
+                <RouteForAll path="/upload" component={ImageUpload} />
+                <Route component={RedirectToNotFound} />
+              </Switch>
   </div>)
 }
 
