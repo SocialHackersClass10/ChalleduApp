@@ -6,6 +6,7 @@ import { Button } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../App.css';
 import logo from '../images/logo.svg';
+import ModelPopup from "./ModelPopup";
 
 
 const buttonStyle = { maxWidth: 200, margin: '20px  auto 10px ' };
@@ -15,7 +16,12 @@ const Form = () => {
   let history = useHistory()
 
   //whatever user types reseting the value
-  const [values, setValues] = useState({ email: "", password: "" });
+  const [values, setValues] = useState({ email: "", password: "", });
+
+  const [pop, setPop] = useState({ 
+    showPopup: false,
+    text:'login' 
+  });
 
   const user = useContext(UserContext);
 
@@ -62,12 +68,16 @@ const Form = () => {
 
     } catch(anError) {
       console.log('Login Error:',anError);
-
+      setPop({
+        showPopup: !pop.showPopup,
+        text:'username or password invalid'
+      });
       // TODO:
       // include here additional desired login-error handling
       // which should be decided by the front-end team
 
     };
+    
   }
 
   return (
@@ -107,6 +117,12 @@ const Form = () => {
           <Button  color="success" bsStyle="primary" bsSize="large" block type="submit"> Log In </Button>
         </div>
         </div>
+        {pop.showPopup ?
+         <ModelPopup
+          text={pop.text}
+         />
+         : null
+       }
       </form>
     </div>
   );
