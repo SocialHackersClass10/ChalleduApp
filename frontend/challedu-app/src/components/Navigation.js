@@ -10,7 +10,7 @@ import { useMediaQuery } from 'react-responsive'
 const Navigation = (props) => {
     const [isOpen, setIsOpen] = useState(true);
     const toggle = () => setIsOpen(!isOpen);
-    const user = useContext(UserContrext);
+    const user = useContext(UserContext);
     const isMobile = useMediaQuery({ query: '(max-width: 767px)' })
     const closeWhenClicked = () => { if (isMobile) { toggle() } }
 

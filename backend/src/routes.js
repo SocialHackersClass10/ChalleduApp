@@ -20,7 +20,7 @@ router.get('/users', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algor
     try {
         let users;
         if (req.user.role === 'admin') {
-            users = await User.find({ document_state: getDocumentState(req.query.state) }).select('-password');
+            users = await User.find({}).select('-password');
         } else {
             users = await User.find({ document_state: 'Approved' }).select('-password');
         }
@@ -185,7 +185,7 @@ router.get('/ngos', jwtMiddleware({ secret: process.env.ACCESS_TOKEN_KEY, algori
     try {
         let ngos;
         if (req.user.role === 'admin') {
-            ngos = await NGO.find({ document_state: getDocumentState(req.query.state) }, 'name image description affinities');
+            ngos = await NGO.find({}, 'name image description affinities');
         } else {
             ngos = await NGO.find({ document_state: 'Approved' }, 'name image description affinities');
         }

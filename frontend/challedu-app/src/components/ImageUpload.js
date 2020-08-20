@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Container, Form, InputGroup } from 'reactstrap';
-import RegisterPopup from "./RegisterPopup";
+import RegisterPopup from "./ModelPopup";
 
 class ImageUpload extends Component {
     constructor(props) {
@@ -19,10 +19,10 @@ class ImageUpload extends Component {
         });
       }
 
-    handleChange = event => { 
-        // console.log(typeof(event.target.files)) 
-        this.setState({ selectedFile: event.target.files[0] }); 
-    }; 
+    handleChange = event => {
+        // console.log(typeof(event.target.files))
+        this.setState({ selectedFile: event.target.files[0] });
+    };
     handleSubmit = (e) => {
         e.preventDefault(e);
         const formData = new FormData()
@@ -36,7 +36,7 @@ class ImageUpload extends Component {
             body: formData
         })
         .then(res => res.json())
-        .then(file =>{ 
+        .then(file =>{
                 if (file.message=='Success'){
                     this.togglePopup("Upload SUCCESS");
                 }else{
@@ -46,41 +46,41 @@ class ImageUpload extends Component {
             // console.log(error.message)
             this.togglePopup("Connection ERROR");
         });
-    }; 
-    fileData = () => { 
-        if (this.state.selectedFile) { 
-            return ( 
-                <div> 
-                    <h2>File Details:</h2> 
-                    <p>File Name: {this.state.selectedFile.name}</p> 
-                    <p>File Type: {this.state.selectedFile.type}</p> 
-                    <p> 
-                    Last Modified:{" "} 
-                    {this.state.selectedFile.lastModifiedDate.toDateString()} 
-                    </p> 
-                </div> 
-            ); 
-        } else { 
+    };
+    fileData = () => {
+        if (this.state.selectedFile) {
+            return (
+                <div>
+                    <h2>File Details:</h2>
+                    <p>File Name: {this.state.selectedFile.name}</p>
+                    <p>File Type: {this.state.selectedFile.type}</p>
+                    <p>
+                    Last Modified:{" "}
+                    {this.state.selectedFile.lastModifiedDate.toDateString()}
+                    </p>
+                </div>
+            );
+        } else {
             return ""
         };
-    }; 
-    render() { 
-        return ( 
+    };
+    render() {
+        return (
             <div>
-                <h3>Select File to Upload!</h3> 
+                <h3>Select File to Upload!</h3>
                 <div>
                     <Container>
                         <Form>
                             <InputGroup>
-                            <input type="file" onChange={this.handleChange} /> 
-                            <Button onClick={this.handleSubmit} className='btn-btn' type="upload" color='success'> 
-                            Upload! 
+                            <input type="file" onChange={this.handleChange} />
+                            <Button onClick={this.handleSubmit} className='btn-btn' type="upload" color='success'>
+                            Upload!
                             </Button>
                             </InputGroup>
                         </Form>
                     </Container>
                 </div>
-                {this.fileData()} 
+                {this.fileData()}
                 {this.state.showPopup ?
          <RegisterPopup
           text={this.state.text}
@@ -88,9 +88,9 @@ class ImageUpload extends Component {
          />
          : null
        }
-            </div> 
-        ); 
+            </div>
+        );
     };
-}  
+}
 
 export default ImageUpload;
