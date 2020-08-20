@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import UserProvider from "../UserProvider";
 import { Button, Card, CardBody, Col, Container,
     Form, Input, InputGroup, Row } from 'reactstrap';
-import RegisterPopup from "./RegisterPopup";
+import ModelPopup from "./ModelPopup";
 import logo from '../images/logo.svg';
 import '../App.css';
 
@@ -106,7 +106,7 @@ export default class RegisterComponent extends Component {
                             </select>
                          <Button onClick={this.handleSubmit} color='success' block>Register</Button>
               {this.state.showPopup ?
-              <RegisterPopup
+              <ModelPopup
                  text={this.state.text}
                   closePopup={this.togglePopup.bind(this)}
               />

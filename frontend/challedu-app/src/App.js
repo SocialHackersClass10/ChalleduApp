@@ -4,7 +4,10 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import './App.css';
 
 
-//Importing components
+
+//Importing Components
+import LoginForm from "./components/LoginForm";
+import RegisterForm from "./components/RegisterForm";
 import ProfileForm from "./components/ProfileForm";
 import welcome from "./components/welcome";
 import Navbar from "./components/Navigation"
@@ -19,23 +22,22 @@ import RouteOnlyForAdmins from "./components/RouteOnlyForAdmins";
 import NoPermision from "./components/NoPermision";
 import PageNotFound from "./components/PageNotFound";
 import RedirectToNotFound from "./components/RedirectToNotFound";
-import RegisterForm from "./components/RegisterForm";
-import LoginForm from "./components/LoginForm";
-
+import ImageUpload from "./components/ImageUpload";
 
 const Main = () => {
   return (<div className="parent">
-    <Navbar />
-    <Switch>
-      <RouteForAll exact path="/main" component={MainContent} />
-      <RouteForAll path="/users" component={Users} />
-      <RouteForAll path="/user/:id" component={User} />
-      <RouteForAll path="/ngos" component={Ngos} />
-      <RouteForAll path="/ngo/:id" component={Ngo} />
-      <RouteOnlyForAdmins path="/usersList" component={AllUsersList} />
-      <RouteForAll path="/profileform" component={ProfileForm} />
-      <Route component={RedirectToNotFound} />
-    </Switch>
+            <Navbar />
+              <Switch>
+                <RouteForAll exact path="/main" component={MainContent} />
+                <RouteForAll path="/users" component={Users} />
+                <RouteForAll path="/user/:id" component={User} />
+                <RouteForAll path="/ngos" component={Ngos} />
+                <RouteForAll path="/ngo/:id" component={Ngo} />
+                <RouteOnlyForAdmins path="/usersList" component={AllUsersList} />
+                <RouteForAll path="/profileform" component={ProfileForm} />
+                <RouteForAll path="/upload" component={ImageUpload} />
+                <Route component={RedirectToNotFound} />
+              </Switch>
   </div>)
 }
 
