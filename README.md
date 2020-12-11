@@ -1,10 +1,32 @@
 
 # ChalleduApp
-This repository contains the Code of the ChalleduApp project, which is a result of collaboration between SHA-students of Class 10 &amp; Challedu.com.
 
+This repository contains the Code of the ChalleduApp project, which is a result of collaboration between SHA-students of Class 10 & [Challedu.com](https://challedu.com).
+
+## Quickstart
+
+To launch the application you need to run both the backend and frontend applications:
+
+- Running the backend
+
+```bash
+cd backend
+npm start
+```
+
+You will see a message like `Server ready, listening on port 4321`. Your backend is ready!
+
+- Running the frontend
+
+```bash
+cd frontend
+npm start
+```
 
 ## About the Server
+
 The server is the back-end part of Challedu App.
+
 The server's folder is **backend**, which resides under the main project folder. To successfully run the server during development phase, you need to execute following steps :
 *   Open a terminal
 
@@ -33,9 +55,8 @@ The server will log a greeting and either provide feedback in case of an error, 
 
 You can now leave that console in the background for the duration of the tests. To stop the server, bring that console window to the foreground and press CTRL+C. This will terminate server execution.
 
-
-
 ## About Server constants  ( dotenv )
+
 This file will contain any constants for the Back-end Server application
 It is expected to reside inside the root folder of the back-end, for example:
 ```
@@ -54,15 +75,18 @@ The file contains following definitions:
 
 
 #### About constant SERVER_PORT:
+
 This is the port our server will be listening to, when deployed. The final setting will be decided (most probably) by the client's admin team.
 
 #### About constant MONGODB_KEY:
+
 This defines the URL & the credentials & database name for the mongodb connection.
 For the time being, it is pointing to a Private Cluster on Atlas.
 It was suggested and decided to keep a common datastore for this step of the development cycle, so we could all have access to the same data.
 The Team has been provided with a ".env" file, which contains all the necessary information to connect to said database.
 
 #### About JWT KEYS constants
+
 These keys are used to encrypt server-issued authorization tokens.
 
 As their names imply, the ACCESS_TOKEN_KEY is used for issued access token encryptiion, valid for 24 hrs, and the REFRESH_TOKEN_KEY is used for encrypting issued refresh token, which are valid for 7 days.
