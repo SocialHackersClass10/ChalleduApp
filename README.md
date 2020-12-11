@@ -26,7 +26,7 @@ The server's folder is **backend**, which resides under the main project folder.
 
 *   Once all dependency installations are complete and the dotenv file existence has been verified, you can run the server by following command :
 ```
-        node ./src/index
+    npm start
 ```
 
 The server will log a greeting and either provide feedback in case of an error, or log **Server ready, listening on port XXXX** in case it was successfully initialized and is ready to serve.
